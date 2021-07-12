@@ -1,5 +1,5 @@
 {
-  "name": "sistema-de-inscricoes",
+  "name": "backend-corrida",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/dev-pma/sistema-de-inscricoes.git"
+    "url": "git+https://gitlab.com/adriano.barbosa100/backend-corrida.git" 
   },
   "author": "Adriano Barbosa DRK",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/dev-pma/sistema-de-inscricoes/issues"
+    "url": "https://gitlab.com/adriano.barbosa100/backend-corrida/issues"
   },
-  "homepage": "https://gitlab.com/dev-pma/sistema-de-inscricoes#readme",
+  "homepage": "https://gitlab.com/adriano.barbosa100/backend-corrida#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
