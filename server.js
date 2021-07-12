@@ -1,0 +1,64 @@
+import compression from 'compression'
+import express from 'express'
+import ejs from 'ejs'
+import bodyParser from 'body-parser'
+import mongoose from 'mongoose'
+import morgan from 'morgan'
+import cors from 'cors'
+import path from 'path'
+
+//START
+const app = express()
+
+//AMBIENTE
+const isProduction = process.env.NODE_ENV === 'production'
+const PORT = process.env.PORT || 3000
+
+//ARQUIVOS ESTATICOS
+app.use('/public', express.static(`${__dirname}'/public'`))
+app.use('/public/img', express.static(`${__dirname}'/public/img'`))
+
+//SETUP MOONGODB
+const dbs = require('./config/database.json')
+const dbURI = isProduction ? dbs.dbProduction : dbs.dbTest
+mongoose.connect(dbURI, { useNewUrlParser: true })
+
+//EJS ENGINE
+app.set('view engine', 'ejs')
+
+//CONFIG
+if (!isProduction) app.use(morgan('dev'))
+app.use(cors())
+app.disable('x-powered-by')
+app.use(compression())
+
+// SETUP BODY PARSER
+app.use(express.urlencoded({ extended: true, limit: 1.5 * 1024 * 1024 }));
+app.use(express.json({ limit: 1.5 * 1024 * 1024 }));
+
+//MODELS
+require('./models')
+//ROUTES
+app.use('/', require('./routes'))
+
+//ROTA 404
+app.use((req, res, next) => {
+    const err = new Error('Not Found')
+    err.status = 404
+    next(err)
+})
+
+//ROTA 422, 500, 401
+app.use((req, res, next) => {
+    res.status(err.status || 500)
+    if (err.status !== 404) console.warn('Error: ', err.message, new Date())
+    res.json({ errors: { message: err.message, status: err.status } })
+})
+
+//listen
+app.listen(port, (err) => {
+    if (err) throw err
+    console.log(`Servidor rodando na //localhost:${PORT}`)
+})
+
+export default app
