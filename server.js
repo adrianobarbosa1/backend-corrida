@@ -1,11 +1,11 @@
-import compression from 'compression'
-import express from 'express'
-import ejs from 'ejs'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import morgan from 'morgan'
-import cors from 'cors'
-import path from 'path'
+const compression = require("compression");
+const express = require("express");
+const ejs = require("ejs");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const cors = require("cors");
+const path = require('path');
 
 //START
 const app = express()
@@ -15,13 +15,13 @@ const isProduction = process.env.NODE_ENV === 'production'
 const PORT = process.env.PORT || 3000
 
 //ARQUIVOS ESTATICOS
-app.use('/public', express.static(`${__dirname}'/public'`))
-app.use('/public/img', express.static(`${__dirname}'/public/img'`))
+app.use('/public', express.static(__dirname + "/public"))
+app.use('/public/img', express.static(__dirname + '/public/img'))
 
 //SETUP MOONGODB
 const dbs = require('./config/database.json')
 const dbURI = isProduction ? dbs.dbProduction : dbs.dbTest
-mongoose.connect(dbURI, { useNewUrlParser: true })
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
 //EJS ENGINE
 app.set('view engine', 'ejs')
@@ -36,8 +36,9 @@ app.use(compression())
 app.use(express.urlencoded({ extended: true, limit: 1.5 * 1024 * 1024 }));
 app.use(express.json({ limit: 1.5 * 1024 * 1024 }));
 
-//MODELS
-require('./models')
+// MODELS
+require("./models")
+
 //ROUTES
 app.use('/', require('./routes'))
 
@@ -56,9 +57,7 @@ app.use((req, res, next) => {
 })
 
 //listen
-app.listen(port, (err) => {
+app.listen(PORT, (err) => {
     if (err) throw err
     console.log(`Servidor rodando na //localhost:${PORT}`)
 })
-
-export default app

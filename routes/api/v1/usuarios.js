@@ -1,13 +1,9 @@
-import express from 'express'
-import auth from '../../auth'
-import UsuarioController from '../../../controllers/UsuarioController'
+const router = require("express").Router();
+const auth = require("../../auth");
+const UsuarioController = require("../../../controllers/UsuarioController");
 
-const router = express.Router()
-const usuarioController = new UsuarioController()
+const usuarioController = new UsuarioController();
 
-
-router.get('/', auth.required, usuarioController.index)
-router.get('/:id', auth.required, usuarioController.show)
 
 router.post('/login', usuarioController.login)
 router.post('/registrar', usuarioController.store)
@@ -19,4 +15,7 @@ router.post('/recuperar-senha', usuarioController.createRecovery)
 router.get('/senha-recuperada', usuarioController.showCompleteRecovery)
 router.post('/senha-recuperada', usuarioController.completeRecovery)
 
-export default router
+router.get('/', auth.required, usuarioController.index)
+router.get('/:id', auth.required, usuarioController.show)
+
+module.exports = router;

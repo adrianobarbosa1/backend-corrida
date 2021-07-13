@@ -1,12 +1,9 @@
-import mongoose from 'mongoose'
-Schema = mongoose.Schema
-import mongoosePaginate from 'mongoose-paginate'
-import uniqueValidator from 'mongoose-unique-validator'
-import crypto from 'crypto'
-import jwt from 'jsonwebtoken'
-import secret from '../config'
-
-const secrete = secret.secret
+const mongoose = require('mongoose')
+const mongoosePaginate = require("mongoose-paginate");
+const uniqueValidator = require('mongoose-unique-validator');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const secret = require('../config').secret;
 
 const UsuarioSchema = new mongoose.Schema({
     nome: {

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import enviarEmailRecovery from '../helpers/email-recovery'
-const Usuario = mongoose.model('Usuario')
+const mongoose = require('mongoose');
+const Usuario = mongoose.model('Usuario');
+const enviarEmailRecovery = require('../helpers/email-recovery');
 
 class UsuarioController {
 
@@ -35,7 +35,7 @@ class UsuarioController {
     store(req, res, next) {
         const { nome, username, email, password } = req.body
 
-        if(!nome || !username || !email || !password ) return res.status(422).json({errors: 'preencha todos os campos de cadastro'})
+        if (!nome || !username || !email || !password) return res.status(422).json({ errors: 'preencha todos os campos de cadastro' })
 
         const usuario = new Usuario({ nome, username, email })
         usuario.setSenha(password)
@@ -74,8 +74,8 @@ class UsuarioController {
     //POST /login
     login(req, res, next) {
         const { username, password } = req.body;
-        if(!username) return res.status(401).json({ errors: "Não pode ficar vazio" })
-        if(!password) return res.status(401).json({ errors: "Não pode ficar vazio" })
+        if (!username) return res.status(401).json({ errors: "Não pode ficar vazio" })
+        if (!password) return res.status(401).json({ errors: "Não pode ficar vazio" })
 
         Usuario.findOne({ username }).then((usuario) => {
             if (!usuario) return res.status(401).json({ errors: "Usuario não registrado" })
@@ -100,7 +100,9 @@ class UsuarioController {
             if (!usuario) return res.render('recovery', { error: 'Não existe usuário com este email', success: null })
             const recoveryData = usuario.criarTokenRecuperacaoSenha();
             return usuario.save().then(() => {
-                    return res.render('recovery', { error: null, success: true })
+                enviarEmailRecovery({ usuario, recovery: recoveryData }, (error = null, success = null) => {
+                    return res.render('recovery', { error, success })
+                })
             }).catch(next)
         }).catch(next)
     }
@@ -136,4 +138,4 @@ class UsuarioController {
 
 }
 
-export default UsuarioController
+module.exports = UsuarioController
