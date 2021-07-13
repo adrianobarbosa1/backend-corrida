@@ -9,7 +9,6 @@ module.exports = ({ usuario, recovery }, cb) => {
         Aqui está o link para redefinir a sua senha. Acesse ele e digite sua nova senha:
     </p>
    <a href="${link}/api/v1/usuarios/senha-recuperada?token=${recovery.token}">
-            ${link}/api/v1/usuarios/senha-recuperada?token=${recovery.token}
         </a>
     <br/><br/><hr/>
     <p>
@@ -24,7 +23,7 @@ module.exports = ({ usuario, recovery }, cb) => {
         to: usuario.email,
         subject: 'Redefinição de senha - Equipe de corrida Anápolis',
         html: message
-    };
+    }
 
     if (process.env.NODE_ENV === 'production') {
         transporter.sendMail(opcoesEmail, (error, info) => {
@@ -35,7 +34,7 @@ module.exports = ({ usuario, recovery }, cb) => {
                 return cb(null, 'Link para redefinição de senha foi enviado com sucesso para seu email.')
             }
         })
-    }else{
+    } else {
         console.log(opcoesEmail)
         return cb(null, 'Link para redefinição de senha foi enviado com sucesso para seu email.')
     }
