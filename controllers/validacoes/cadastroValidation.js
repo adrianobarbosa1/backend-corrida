@@ -16,16 +16,16 @@ const CadastroValidation = {
       nome: Joi.string().required(),
       email: Joi.string().email().required(),
       telefone: Joi.string().required(),
-      cpf: Joi.string().length(14).required().error(() => {
+      cpf: Joi.string().length(14).required().optional().error(() => {
         return { message: 'CPF Inválido.'};
       }),
-      cpf_responsavel: Joi.string().length(14).error(() => {
+      cpf_responsavel: Joi.string().length(14).optional().error(() => {
         return {message: 'CPF Inválido.'};
       }),
       dt_nascimento: Joi.date().required(),
-      rg: Joi.string().required(),
-      uf_rg: Joi.string().required(),
-      equipe: Joi.string().required(),
+      rg: Joi.string().optional(),
+      uf_rg: Joi.string().optional(),
+      equipe: Joi.string().optional(),
       sexo: Joi.string().required()
     }
   },
