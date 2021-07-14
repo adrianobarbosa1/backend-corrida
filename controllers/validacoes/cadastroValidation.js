@@ -16,7 +16,7 @@ const CadastroValidation = {
       nome: Joi.string().required(),
       email: Joi.string().email().required(),
       telefone: Joi.string().required(),
-      cpf: Joi.string().length(14).required().optional().error(() => {
+      cpf: Joi.string().length(14).optional().error(() => {
         return { message: 'CPF Inválido.'};
       }),
       cpf_responsavel: Joi.string().length(14).optional().error(() => {

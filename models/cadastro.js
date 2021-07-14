@@ -17,7 +17,6 @@ const CadastroSchema = new mongoose.Schema({
   },
   cpf: {
     type: String,
-    unique: true,
   },
   cpf_responsavel: {
     type: String,
