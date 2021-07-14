@@ -31,10 +31,10 @@ const CadastroValidation = {
   },
   update: {
     body: {
-      nome: Joi.string().required(),
-      email: Joi.string().email().required(),
-      telefone: Joi.string().required(),
-      cpf: Joi.string().length(14).required().error(() => {
+      nome: Joi.string().optional(),
+      email: Joi.string().email().optional(),
+      telefone: Joi.string().optional(),
+      cpf: Joi.string().length(14).optional().error(() => {
         return {
           message: 'CPF Inválido.',
         }
@@ -44,12 +44,12 @@ const CadastroValidation = {
           message: 'CPF Inválido.',
         }
       }),
-      dt_nascimento: Joi.date().required(),
-      rg: Joi.string().required(),
-      uf_rg: Joi.string().required(),
-      equipe: Joi.string().required(),
-      sexo: Joi.string().required(),
-      alimento_doado: Joi.string().required()
+      dt_nascimento: Joi.date().optional(),
+      rg: Joi.string().optional(),
+      uf_rg: Joi.string().optional(),
+      equipe: Joi.string().optional(),
+      sexo: Joi.string().optional(),
+      alimento_doado: Joi.string().optional()
     }
   },
   remove: {
