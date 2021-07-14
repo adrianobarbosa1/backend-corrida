@@ -1,16 +1,15 @@
 const transporter = require('nodemailer').createTransport(require('../config/email'));
-const { api } = require('../config');
+const { api: link } = require('../config');
 
 module.exports = ({ usuario, recovery }, cb) => {
-    console.log(api, recovery.token)
     const message = `
     <h1 style="text-align: center;">Recuperação de Senha</h1>
     <br />
     <p>
         Acesse o link abaixo e digite a sua nova senha:
     </p>
-   <a href="${api}/api/v1/usuarios/senha-recuperada?token=${recovery.token}">
-            ${api}/api/v1/usuarios/senha-recuperada?token=${recovery.token}
+   <a href="${link}/api/v1/usuarios/senha-recuperada?token=${recovery.token}">
+            ${link}/api/v1/usuarios/senha-recuperada?token=${recovery.token}
         </a>
     <br/><br/><hr/>
     <p>
