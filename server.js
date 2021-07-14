@@ -44,7 +44,7 @@ app.use('/', require('./routes'))
 
 //ROTA 404
 app.use((req, res, next) => {
-    const err = new Error('Not Found')
+    const err = new Error('Rota não encontrada!')
     err.status = 404
     next(err)
 })
