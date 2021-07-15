@@ -17,6 +17,8 @@ const CadastroSchema = new mongoose.Schema({
   },
   cpf: {
     type: String,
+    unique: true,
+    required: [true, "não pode ficar vazio."]
   },
   cpf_responsavel: {
     type: String,

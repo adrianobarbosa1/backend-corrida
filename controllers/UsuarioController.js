@@ -33,7 +33,11 @@ class UsuarioController {
 
     //POST /registrar  CREATE
     store(req, res, next) {
-        const { nome, username, email, password } = req.body
+        const { 
+            nome, 
+            username, 
+            email, 
+            password } = req.body
 
         if (!nome || !username || !email || !password) return res.status(422).json({ errors: 'preencha todos os campos de cadastro' })
 
@@ -135,5 +139,81 @@ class UsuarioController {
     }
 
 }
+
+// async login(req, res, next) {
+//     var params = req.body
+//     console.log(params)
+//     // let usuario = 'andrewisley'
+//     let groupName = 'RHSIS'
+//     // let passwordUser = 'andre2611'
+//     let usuario = params.cpf
+//     //let groupName = params.group
+//     let passwordUser = params.senha
+
+//     let usernameUser = usuario + '@anapolis.go.gov.br'
+//     let userDn = 'DC=anapolis,DC=go,DC=gov,DC=br'
+//     var user = usernameUser.split('@')
+//     var sAMAccountName = user[0];
+//     var config = {
+//         url: 'ldap://10.2.200.11',
+//         baseDN: userDn,
+//         username: 'redmine@anapolis.go.gov.br',
+//         password: 'PM@redmine@2020',
+//         attributes: {
+//             user: ['sAMAccountName', 'description', 'cn', 'dn', 'userPrincipalName', 'objectSid']
+//         },
+//         filter: 'CN=*',
+//     }
+//     var ad = new ActiveDirectory(config);
+
+//     ad.authenticate(usernameUser, passwordUser, function (err, auth) {
+
+//         if (auth) {
+
+//             ad.isUserMemberOf(sAMAccountName, groupName, function (err, isMember) {
+//                 if (err) {
+//                     console.log('ERROR: ' + JSON.stringify(err));
+//                     return;
+//                 }
+
+//                 if (isMember === false) {
+//                     res.status(403).json({ message: "Usuario:" + usernameUser + " não Autorizado no Grupo:" + groupName })
+//                 }
+//                 else {
+//                     ad.findUser(sAMAccountName, function (err, result) {
+//                         if (err) {
+//                             // console.log(err);
+//                             console.log("No Groups found.");
+//                         }
+//                         console.log(result)
+//                         //auth ok
+//                         let id = result.objectSid
+//                         let cpf = result.description
+//                         let username = result.sAMAccountName
+//                         let nome = result.cn
+//                         var busca = Usuarios.findAndCountAll({
+//                             where: { cpf: cpf, userid: id, excluido: false }
+//                         }).then(response => {
+//                             var teste = response.rows[0]
+//                             var permissao = teste.dataValues.permissao
+//                             if (response.count > 0) {
+//                                 var token = jwt.sign({ id, cpf, username, permissao }, process.env.SECRET, {
+//                                     expiresIn: 300000 // expires in 5min
+//                                 });
+//                                 let criptToken = 'Bearer ' + token
+//                                 return res.json({ token: criptToken });
+//                             }
+//                         })
+
+//                     })
+//                 }
+//             });
+//         }
+//         else {
+//             res.status(403).json({ message: "Usuario ou senha incorreta" })
+//         }
+//     });
+// }
+
 
 module.exports = UsuarioController
