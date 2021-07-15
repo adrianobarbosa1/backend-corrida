@@ -16,40 +16,40 @@ const CadastroValidation = {
       nome: Joi.string().required(),
       email: Joi.string().email().required(),
       telefone: Joi.string().required(),
-      cpf: Joi.string().length(14).optional().error(() => {
+      cpf: Joi.string().min(14).required().error(() => {
         return { message: 'CPF Inválido.'};
       }),
-      cpf_responsavel: Joi.string().length(14).optional().error(() => {
+      cpf_responsavel: Joi.string().length(14).optional().allow('').error(() => {
         return {message: 'CPF Inválido.'};
       }),
       dt_nascimento: Joi.date().required(),
-      rg: Joi.string().optional(),
-      uf_rg: Joi.string().optional(),
-      equipe: Joi.string().optional(),
+      rg: Joi.string().optional().allow(''),
+      uf_rg: Joi.string().optional().allow(''),
+      equipe: Joi.string().optional().allow(''),
       sexo: Joi.string().required()
     }
   },
   update: {
     body: {
-      nome: Joi.string().optional(),
-      email: Joi.string().email().optional(),
-      telefone: Joi.string().optional(),
-      cpf: Joi.string().length(14).optional().error(() => {
+      nome: Joi.string().optional().allow(''),
+      email: Joi.string().email().optional().allow(''),
+      telefone: Joi.string().optional().allow(''),
+      cpf: Joi.string().length(14).required().error(() => {
         return {
           message: 'CPF Inválido.',
         }
       }),
-      cpf: Joi.string().length(14).error(() => {
+      cpf_responsavel: Joi.string().length(14).optional().allow('').error(() => {
         return {
           message: 'CPF Inválido.',
         }
       }),
-      dt_nascimento: Joi.date().optional(),
-      rg: Joi.string().optional(),
-      uf_rg: Joi.string().optional(),
-      equipe: Joi.string().optional(),
-      sexo: Joi.string().optional(),
-      alimento_doado: Joi.string().optional()
+      dt_nascimento: Joi.date().optional().allow(''),
+      rg: Joi.string().optional().allow(''),
+      uf_rg: Joi.string().optional().allow(''),
+      equipe: Joi.string().optional().allow(''),
+      sexo: Joi.string().optional().allow(''),
+      alimento_doado: Joi.string().optional().allow('')
     }
   },
   remove: {
