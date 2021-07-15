@@ -53,7 +53,7 @@ class CadastroController {
 
     cadastro.save()
       .then(() => res.json({ cadastro }))
-      .catch(next);
+      .catch(() => res.status(422).json({ errors: "cpf já cadastrado" }))
   }
 
   update(req, res, next) {
@@ -93,8 +93,8 @@ class CadastroController {
   }
 
   //DELETE /
- async remove(req, res, next) {
-    await Cadastro.findById(req.params.id)
+  remove(req, res, next) {
+    Cadastro.findById(req.params.id)
       .then(cadastro => {
         console.log(req.params.id, cadastro)
         if (!cadastro) return res.status(401).json({ errors: 'Cadastro não registrado' });
