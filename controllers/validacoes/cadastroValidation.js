@@ -26,7 +26,8 @@ const CadastroValidation = {
       rg: Joi.string().optional().allow(''),
       uf_rg: Joi.string().optional().allow(''),
       equipe: Joi.string().optional().allow(''),
-      sexo: Joi.string().required()
+      sexo: Joi.string().required(),
+      numeroInscricao: Joi.string().optional().allow('')
     }
   },
   update: {

@@ -4,6 +4,7 @@ const CadastroController = require("../../../controllers/CadastroController")
 
 const validate = require("express-validation")
 const { CadastroValidation } = require("../../../controllers/validacoes/cadastroValidation")
+// const { AdmValidation } = require("../../../controllers/validacoes/admValidation")
 
 const cadastroController = new CadastroController()
 

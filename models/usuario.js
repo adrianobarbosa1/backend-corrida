@@ -10,7 +10,7 @@ const UsuarioSchema = new mongoose.Schema({
         type: String,
         required: [true, 'não pode ficar vazio.']
     },
-    username: {
+    username_cpf: {
         type: String,
         unique: true,
         required: [true, 'não pode ficar vazio.']

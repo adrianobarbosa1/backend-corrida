@@ -23,37 +23,26 @@ class CadastroController {
 
   //POST /registrar //CREATE
   store(req, res, next) {
-    const {
-      nome,
-      email,
-      telefone,
-      cpf,
-      cpf_responsavel,
-      dt_nascimento,
-      rg,
-      uf_rg,
-      equipe,
-      sexo,
-      alimento_doado
-    } = req.body
+    const { nome, email, telefone, cpf, cpf_responsavel, dt_nascimento, rg, uf_rg,
+      equipe, sexo, alimento_doado } = req.body
 
-    const cadastro = new Cadastro({
-      nome,
-      email,
-      telefone,
-      cpf,
-      cpf_responsavel,
-      dt_nascimento,
-      rg,
-      uf_rg,
-      equipe,
-      sexo,
-      alimento_doado
-    })
+    const error = []
+    if(!nome) error.push('nome')
+    if(!email) error.push('email')
+    if(!telefone) error.push('telefone')
+    if(!cpf) error.push('cpf')
+    if(!dt_nascimento) error.push('dt_nascimento')
+    if(!sexo) error.push('sexo')
+    if(error.length > 0) return res.status(422).json({ error: "required", payload: error})
+
+    const numeroInscricao = moment().format('YYMhmmss')
+    
+    const cadastro = new Cadastro({ nome, email, telefone, cpf, cpf_responsavel, 
+      dt_nascimento, rg, uf_rg, equipe, sexo, alimento_doado, numeroInscricao })
 
     cadastro.save()
       .then(() => res.json({ cadastro }))
-      .catch(() => res.status(422).json({ errors: "cpf já cadastrado" }))
+      .catch(()=> res.status(422).json({ errors: "cpf já cadastrado" })) 
   }
 
   update(req, res, next) {

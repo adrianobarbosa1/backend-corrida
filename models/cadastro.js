@@ -40,9 +40,12 @@ const CadastroSchema = new mongoose.Schema({
     type: String,
     required: [true, "não pode ficar vazio."],
   },
+  numeroInscricao: {
+    type: String,
+    unique: true,
+  },
   alimento_doado: {
     type: Boolean,
-    required: [true, "não pode ficar vazio."],
     default: false
   },
   deletado: {
