@@ -11,6 +11,7 @@ const cadastroController = new CadastroController()
 router.post("/", validate(CadastroValidation.store), cadastroController.store) //TESTADO
 router.get("/", auth.required, cadastroController.index) //TESTADO
 router.put("/:id", auth.required, validate(CadastroValidation.update), cadastroController.update) //TESTADO
+router.put("/alterar/participou", auth.required, cadastroController.participou) //TESTADO
 router.post("/cpf",  validate(CadastroValidation.show), cadastroController.show) //TESTADO
 router.delete("/:id", auth.required, validate(CadastroValidation.remove), cadastroController.remove); //TESTADO
 
