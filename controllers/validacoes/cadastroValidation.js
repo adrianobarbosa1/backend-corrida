@@ -27,7 +27,9 @@ const CadastroValidation = {
       uf_rg: Joi.string().optional().allow(''),
       equipe: Joi.string().optional().allow(''),
       sexo: Joi.string().required(),
-      numeroInscricao: Joi.string().optional().allow('')
+      numeroInscricao: Joi.string().optional().allow(''),
+      alimento_doado: Joi.boolean().optional().allow(''),
+      participou: Joi.boolean().optional().allow('')
     }
   },
   update: {
@@ -50,7 +52,8 @@ const CadastroValidation = {
       uf_rg: Joi.string().optional().allow(''),
       equipe: Joi.string().optional().allow(''),
       sexo: Joi.string().optional().allow(''),
-      alimento_doado: Joi.string().optional().allow('')
+      alimento_doado: Joi.boolean().optional().allow(''),
+      participou: Joi.boolean().optional().allow('')
     }
   },
   remove: {
