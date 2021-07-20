@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/adriano.barbosa100/backend-corrida.git" 
+    "url": "git+https://gitlab.com/adriano.barbosa100/backend-corrida.git"
   },
   "author": "Adriano Barbosa DRK",
   "license": "ISC",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://gitlab.com/adriano.barbosa100/backend-corrida#readme",
   "dependencies": {
+    "activedirectory": "^0.7.2",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
