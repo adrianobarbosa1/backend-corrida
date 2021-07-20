@@ -48,6 +48,10 @@ const CadastroSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  participou: {
+    type: Boolean,
+    default: false
+  },
   deletado: {
     type: Boolean,
     required: [true, "não pode ficar vazio."],
