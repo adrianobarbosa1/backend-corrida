@@ -24,25 +24,31 @@ class CadastroController {
   //POST /registrar //CREATE
   store(req, res, next) {
     const { nome, email, telefone, cpf, cpf_responsavel, dt_nascimento, rg, uf_rg,
-      equipe, sexo, alimento_doado } = req.body
+      equipe, sexo, alimento_doado, participou } = req.body
 
     const error = []
-    if(!nome) error.push('nome')
-    if(!email) error.push('email')
-    if(!telefone) error.push('telefone')
-    if(!cpf) error.push('cpf')
-    if(!dt_nascimento) error.push('dt_nascimento')
-    if(!sexo) error.push('sexo')
-    if(error.length > 0) return res.status(422).json({ error: "required", payload: error})
+    if (!nome) error.push('nome')
+    if (!email) error.push('email')
+    if (!telefone) error.push('telefone')
+    if (!cpf) error.push('cpf')
+    if (!dt_nascimento) error.push('dt_nascimento')
+    if (!sexo) error.push('sexo')
+    if (error.length > 0) return res.status(422).json({ error: "required", payload: error })
 
     const numeroInscricao = moment().format('YYMhmmss')
-    
-    const cadastro = new Cadastro({ nome, email, telefone, cpf, cpf_responsavel, 
-      dt_nascimento, rg, uf_rg, equipe, sexo, alimento_doado, numeroInscricao })
+
+    const cadastro = new Cadastro({
+      nome, email, telefone, cpf, cpf_responsavel,
+      dt_nascimento, rg, uf_rg, equipe, sexo, alimento_doado, numeroInscricao, participou
+    })
+
+    Cadastro.count({}, function (err, count) {
+      if (count >= 1500) return res.status(422).json({ errors: 'Quantidade maxima de inscritos atingida' })
+    })
 
     cadastro.save()
       .then(() => res.json({ cadastro }))
-      .catch(()=> res.status(422).json({ errors: "cpf já cadastrado" })) 
+      .catch(() => res.status(422).json({ errors: "cpf já cadastrado" }))
   }
 
   update(req, res, next) {
@@ -57,7 +63,8 @@ class CadastroController {
       uf_rg,
       equipe,
       sexo,
-      alimento_doado
+      alimento_doado,
+      participou
     } = req.body;
 
     Cadastro.findById(req.params.id)
@@ -74,11 +81,43 @@ class CadastroController {
         if (typeof equipe !== "undefined") cadastro.equipe = equipe;
         if (typeof sexo !== "undefined") cadastro.sexo = sexo;
         if (typeof alimento_doado !== "undefined") cadastro.alimento_doado = alimento_doado;
+        if (typeof participou !== "undefined") cadastro.participou = participou;
+
         return cadastro.save()
           .then(() => { return res.json({ cadastro }); })
           .catch(next);
       })
       .catch(next);
+  }
+
+  participou(req, res, next) {
+    try {
+      const { participou } = req.body
+      participou.map(item => {
+        Cadastro.findById(item).then((response) => {
+          response.participou = true
+          response.save()
+        })
+      })
+      return res.status(200).send({ message: `Participantes alterados` })
+    } catch {
+      next
+    }
+  }
+
+  numeroInscricao(req, res, next) {
+    try {
+      Cadastro.find({ participou: null }).then((item) => {
+        item.map((itens) => {
+          itens.participou = false
+          console.log(itens.participou)
+          itens.save()
+        } )
+      })
+      return res.send("sucess")
+    } catch {
+      next
+    }
   }
 
   //DELETE /
