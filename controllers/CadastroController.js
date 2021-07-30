@@ -92,29 +92,15 @@ class CadastroController {
 
   participou(req, res, next) {
     try {
-      const { participou } = req.body
+      const { participou, alteracao } = req.body
+      console.log(participou, alteracao, req.body)
       participou.map(item => {
         Cadastro.findById(item).then((response) => {
-          response.participou = true
+          response.participou = alteracao
           response.save()
         })
       })
       return res.status(200).send({ message: `Participantes alterados` })
-    } catch {
-      next
-    }
-  }
-
-  numeroInscricao(req, res, next) {
-    try {
-      Cadastro.find({ participou: null }).then((item) => {
-        item.map((itens) => {
-          itens.participou = false
-          console.log(itens.participou)
-          itens.save()
-        } )
-      })
-      return res.send("sucess")
     } catch {
       next
     }
