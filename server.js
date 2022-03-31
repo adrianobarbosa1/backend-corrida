@@ -7,6 +7,9 @@ const morgan = require("morgan");
 const cors = require("cors");
 const path = require('path');
 
+//START
+const app = express()
+
 //AMBIENTE
 const isProduction = process.env.NODE_ENV === 'production'
 const PORT = 3006
