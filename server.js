@@ -7,16 +7,6 @@ const morgan = require("morgan");
 const cors = require("cors");
 const path = require('path');
 
-//START
-const app = express()
-
-//AMBIENTE
-const isProduction = process.env.NODE_ENV === 'production'
-const PORT = 3006
-
-//ARQUIVOS ESTATICOS
-app.use('/public', express.static(__dirname + "/public"))
-app.use('/public/img', express.static(__dirname + '/public/img'))
 
 //SETUP MOONGODB
 const dbs = require('./config/database.json')
