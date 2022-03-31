@@ -1,2 +1,0 @@
-require('./usuario')
-require('./cadastro')

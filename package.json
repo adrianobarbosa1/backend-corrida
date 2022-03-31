@@ -1,46 +1,53 @@
 {
-  "name": "backend-corrida",
+  "name": "sistema-de-inscricoes",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "pm2 start ecosystem.config.json --no-daemon",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "test": "mocha --timeout 2000 --exit",
-    "dev": "NODE_ENV=development nodemon server.js",
-    "build": "NODE_ENV=production pm2 start server.js --name=\"apiCorrida\""
+    "docker:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up",
+    "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "docker:test": "docker-compose -f docker-compose.yml -f docker-compose.test.yml up"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/adriano.barbosa100/backend-corrida.git"
+    "url": "git+https://gitlab.com/dev-pma/sistema-de-inscricoes.git"
   },
   "author": "Adriano Barbosa DRK",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/adriano.barbosa100/backend-corrida/issues"
+    "url": "https://gitlab.com/dev-pma/sistema-de-inscricoes/issues"
   },
-  "homepage": "https://gitlab.com/adriano.barbosa100/backend-corrida#readme",
+  "homepage": "https://gitlab.com/dev-pma/sistema-de-inscricoes#readme",
   "dependencies": {
-    "activedirectory": "^0.7.2",
-    "body-parser": "^1.19.0",
+    "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "ejs": "^3.1.6",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
-    "express-jwt": "^5.3.1",
-    "express-validation": "1.0.2",
-    "faker": "^5.5.3",
-    "joi": "14.3.1",
-    "joi-date-extensions": "1.2.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^5.0.0",
+    "helmet": "^5.0.2",
+    "http-status": "^1.5.0",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.13.2",
-    "mongoose-paginate": "^5.0.3",
-    "mongoose-unique-validator": "^2.0.3",
+    "mongoose": "^6.2.3",
+    "mongoose-unique-validator": "^3.0.0",
     "morgan": "^1.10.0",
-    "multer": "^1.4.2",
     "nodemailer": "^6.6.2",
-    "nodemon": "^2.0.12",
-    "request": "^2.88.2",
-    "xml2js": "^0.4.23"
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "pm2": "^5.1.0",
+    "uuid": "^8.3.2",
+    "validator": "^13.7.0",
+    "winston": "^3.5.1",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
