@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         minlength: 8,
         trim: true,
+        validate(value) {
+            if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+                throw new Error('Senha deve conter 8 digitos ao menos uma letra e um numero');
+            }
+        },
         private: true, // used by the toJSON plugin
     },
     role: {
