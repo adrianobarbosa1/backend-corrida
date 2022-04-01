@@ -7,7 +7,7 @@ const createUser = async (userBody) => {
   if (await User.isCpfTaken(userBody.cpf)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'CPF already taken');
   }
-  userBody.password = '123456';
+  userBody.password = '12345678';
   return User.create(userBody);
 };
 
