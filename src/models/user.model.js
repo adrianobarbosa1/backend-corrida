@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         validate(value) {
             if (!validator.isEmail(value)) {
-                throw new Error('Invalid email');
+                throw new Error('Email Inválido');
             }
         },
     },
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate(value) {
             if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-                throw new Error('Senha deve conter 8 digitos ao menos uma letra e um numero');
+                throw new Error('Senha deve conter 8 digitos e ao menos uma letra e um numero');
             }
         },
         private: true, // used by the toJSON plugin
