@@ -1,1 +1,0 @@
-todo atleta vai ser um usuario, mas nem todo usuario vai ser atleta
