@@ -9,7 +9,7 @@ const { tokenTypes } = require('../config/tokens');
 const loginUserWithCpfAndPassword = async (cpf, password) => {
   const user = await userService.getUserByCpf(cpf);
   if (!user || !(await user.isPasswordMatch(password))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'CPF ou senha incorreto');
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Senha ou CPF incorreto');
   }
   return user;
 };
