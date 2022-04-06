@@ -10,8 +10,7 @@ const register = catchAsync(async (req, res) => {
 });
 
 const login = catchAsync(async (req, res) => {
-  const { cpf, password } = req.body;
-  const user = await authService.loginUserWithCpfAndPassword(cpf, password);
+  const user = await authService.loginUserWithCpfOrEmail(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.send({ user, tokens });
 });

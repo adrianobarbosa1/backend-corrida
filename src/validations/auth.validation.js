@@ -10,13 +10,6 @@ const register = {
   }),
 };
 
-// const login = {
-//   body: Joi.object().keys({
-//     cpf: Joi.string().length(14).required(),
-//     password: Joi.string().required(),
-//   }),
-// };
-
 const login = {
   body: Joi.object().keys({
     method: Joi.string().required().valid('cpf','email'),

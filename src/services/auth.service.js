@@ -6,8 +6,18 @@ const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
 
 //Login with cpf and password
-const loginUserWithCpfAndPassword = async (cpf, password) => {
-  const user = await userService.getUserByCpf(cpf);
+const loginUserWithCpfOrEmail = async (body) => {
+  console.log(body)
+  if (body.method === 'email') {
+    const user = await userService.getUserByEmail(body.email)
+    console.log(user)
+    return user;
+  }
+  if (body.method === 'cpf') {
+    const user = await userService.getUserByCpf(body.cpf);
+    return user;
+  }
+
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Senha ou CPF incorreto');
   }
@@ -79,7 +89,7 @@ const verifyEmail = async (verifyEmailToken) => {
 };
 
 module.exports = {
-  loginUserWithCpfAndPassword,
+  loginUserWithCpfOrEmail,
   accessPassword,
   setUserAccess,
   logout,
