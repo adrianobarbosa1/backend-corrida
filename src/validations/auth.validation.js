@@ -10,9 +10,18 @@ const register = {
   }),
 };
 
+// const login = {
+//   body: Joi.object().keys({
+//     cpf: Joi.string().length(14).required(),
+//     password: Joi.string().required(),
+//   }),
+// };
+
 const login = {
   body: Joi.object().keys({
-    cpf: Joi.string().length(14).required(),
+    method: Joi.string().required().valid('cpf','email'),
+    cpf: Joi.string().length(14).when('method', {is: 'cpf', then: Joi.required()}),
+    email: Joi.string().email().when('method', {is: 'email', then: Joi.required()}),
     password: Joi.string().required(),
   }),
 };
