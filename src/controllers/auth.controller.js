@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 const auth = require('../middlewares/auth');
+const createJwt = require('../config/tokens')
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -13,6 +14,31 @@ const login = catchAsync(async (req, res) => {
   const user = await authService.loginUserWithCpfOrEmail(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.send({ user, tokens });
+});
+
+const googleAuth = catchAsync(async (req, res) => {
+  try {
+    req.currentUser = req.user
+
+    const token = createJwt(req.currentUser._id);
+
+    res.status('SUCCESS_MSG').json({
+      status: 'SUCCESS_MSG',
+      data: {
+        token,
+        user: {
+          id: req.currentUser._id,
+          name: req.currentUser.name,
+          email: req.currentUser.email,
+          role: req.currentUser.role,
+
+        }
+      }
+    });
+  } catch (e) {
+    console.log(e.message);
+    return next('new AppError(SIGN_IN_ERR_MSG,INTERNAL_SERVER_ERROR)');
+  }
 });
 
 const setAccess = catchAsync(async (req, res) => {
@@ -57,6 +83,7 @@ const verifyEmail = catchAsync(async (req, res) => {
 module.exports = {
   register,
   login,
+  googleAuth,
   setAccess,
   logout,
   refreshTokens,
