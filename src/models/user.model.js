@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     cpf: {
         type: String,
         unique: true,
-        required: [true, 'can\'t be empty']
+        required: [true, 'CPF não pode ficar vazio']
     },
     email: {
         type: String,
@@ -61,10 +61,26 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
-//check if CPF is taken
+/**
+ * Check if email is taken
+ * @param {string} cpf - The user's email
+ * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
+ * @returns {Promise<boolean>}
+ */
 userSchema.statics.isCpfTaken = async function (cpf, excludeUserId) {
     const user = await this.findOne({ cpf, _id: { $ne: excludeUserId } })
     return !!user;
+};
+
+/**
+ * Check if email is taken
+ * @param {string} email - The user's email
+ * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
+ * @returns {Promise<boolean>}
+ */
+userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  return !!user;
 };
 
 //check if password matches the user's password
