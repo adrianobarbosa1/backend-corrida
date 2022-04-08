@@ -7,17 +7,16 @@ const { roles } = require('../config/roles');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Nome é obrigatório'],
         trim: true,
     },
     cpf: {
         type: String,
         unique: true,
-        required: [true, 'CPF não pode ficar vazio']
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Email é obrigatório'],
         unique: true,
         trim: true,
         lowercase: true,
@@ -29,23 +28,17 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        minlength: 8,
-        trim: true,
-        validate(value) {
-            if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-                throw new Error('Senha deve conter 8 digitos e ao menos uma letra e um numero');
-            }
-        },
-        private: true, // used by the toJSON plugin
+        minlength: 6,
+        required: [true, 'A senha é obrigatória'],
     },
+    strategy:{
+      type: String,
+      required:[true, 'Uma estrategia de autenticação é obrigatório']
+  },
     role: {
         type: String,
         enum: roles,
         default: 'user',
-    },
-    access: {
-        type: Number,
-        default: 0
     },
     isEmailVerified: {
         type: Boolean,

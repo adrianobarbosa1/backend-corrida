@@ -52,7 +52,8 @@ const generateAuthTokens = async (user) => {
   const refreshToken = generateToken(user.id, refreshTokenExpires, tokenTypes.REFRESH);
   await saveToken(refreshToken, user.id, refreshTokenExpires, tokenTypes.REFRESH);
 
-  return {
+  return jwt.sign({
+    id: user.id,
     access: {
       token: accessToken,
       expires: accessTokenExpires.toDate(),
@@ -61,7 +62,7 @@ const generateAuthTokens = async (user) => {
       token: refreshToken,
       expires: refreshTokenExpires.toDate(),
     },
-  };
+  });
 };
 
 const getUserByToken = async (authorization) => {

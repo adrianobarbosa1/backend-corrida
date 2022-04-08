@@ -4,6 +4,10 @@ const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors')
+const { Strategy: FacebookStrategy } = require('passport-facebook');
+const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
+const { authService } = require('./services');
+const { userService } = require('./services')
 const passport = require('passport');
 const httpStatus = require('http-status');
 const config = require('./config/config');
@@ -19,6 +23,12 @@ const app = express();
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
+}
+
+// ENABLE CORS
+if (config.env === 'development') {
+  app.use(cors());
+  app.options('*', cors());
 }
 
 //SECURITY HTTP HEADERS REQUEST BODY
@@ -39,11 +49,76 @@ app.use(mongoSanitize());
 //GZIP COMPRESSION
 app.use(compression());
 
-// ENABLE CORS
-if (config.env === 'development') {
-  app.use(cors());
-  app.options('*', cors());
+//FACEBOOOK AUTH
+passport.use(new FacebookStrategy({
+
+  clientID: config.facebook.id || '',
+  clientSecret: config.facebook.secret || '',
+  callbackURL: `http://localhost:${config.port}/api/v1/auth/auth/facebook`,
+  profileFields: ['id', 'emails', 'name'],
+
+}, async (__, _, profile, cb) => {
+  try {
+    const userMails = profile != null ? profile.emails : null;
+
+    if (!userMails || userMails?.length === 0)
+      return cb(new ApiError(httpStatus.BAD_REQUEST, 'Email da conta do facebook é obrigatório' ), false);
+
+    const user = await userService.getUserByEmail(userMails[0].value);
+
+    if (!user) {
+      const name = profile.name?.givenName + " " + profile.name?.familyName;
+      const user = await authService.createFaceBookOrGoogleUser(userMails[0].value, name, 'FACEBOOK_STRATEGY');
+
+      if (!user) return cb(new ApiError('Falha de autenticação com Facebook', httpStatus.BAD_REQUEST), false);
+
+      await emailService.sendNewOauthUserEMail(userMails[0].value);
+
+      return cb(null, user)
+    }
+    cb(null, user);
+  } catch (e) {
+    console.log(e.message);
+    return cb(new ApiError('Falha de autenticação com Facebook', httpStatus.BAD_REQUEST), false);
+  }
+
+}));
+
+//Google oauth 2.0
+passport.use(new GoogleStrategy({
+  clientID: config.google.id || '',
+  clientSecret: config.google.secret || '',
+  callbackURL: `http://localhost:${config.port}/api/v1/auth/auth/google`
+}, async (_, __, profile, done) => {
+
+  try {
+
+    const userMails = profile != null ? profile.emails : null;
+
+    if (!userMails || userMails?.length === 0)
+      return done(new ApiError(httpStatus.BAD_REQUEST ,'Email da conta do Google é obrigatório'), false);
+
+    const user = await userService.getUserByEmail(userMails[0].value);
+
+    if (!user) {
+      const name = profile.name?.givenName + " " + profile.name?.familyName;
+
+      const user = await authService.createFaceBookOrGoogleUser(userMails[0].value, name, 'GOOGLE_STRATEGY');
+      if (!user) return done(new ApiError(httpStatus.BAD_REQUEST, 'Falha de autenticação com Google'), false);
+
+      await emailService.sendNewOauthUserEMail(userMails[0].value);
+
+      return done('', user)
+    }
+
+    done('', user);
+
+  } catch (e) {
+    console.log(e.message);
+    return done(new ApiError(httpStatus.BAD_REQUEST, 'Falha de autenticação com Google'), false);
+  }
 }
+));
 
 // jwt authentication
 app.use(passport.initialize());

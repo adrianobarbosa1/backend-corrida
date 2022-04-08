@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
+const emailService = require('./email.service')
+const { User } = require('../models');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
@@ -21,15 +23,34 @@ const loginUserWithCpfOrEmail = async (body) => {
   return user;
 };
 
+const createFaceBookOrGoogleUser = async (email, name, strategy) => {
+  const  user = await User.create({ email, name, strategy, password: 'O usuário não exige senha' })
+  console.log(user)
+  return user;
+};
+
+const sendNewOauthUserEMail = async (email) => {
+  await emailService.sendEmail(email, 'Obrigado por se juntar a nós', 'Conta criada com sucesso')
+};
+
+const googleAuth = async (reqUser) => {
+  try {
+    const token = await tokenService.createJwt(reqUser._id);
+    return token;
+  } catch (error) {
+    throw next(new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao fazer login'));
+  }
+}
+
 const accessPassword = async (user, newPassword) => {
   user.password = newPassword;
   return user.save();
-}
+};
 
 const setUserAccess = async (user) => {
   user.access = 1;
   return user.save()
-}
+};
 
 // Logout
 const logout = async (refreshToken) => {
@@ -87,6 +108,9 @@ const verifyEmail = async (verifyEmailToken) => {
 
 module.exports = {
   loginUserWithCpfOrEmail,
+  createFaceBookOrGoogleUser,
+  sendNewOauthUserEMail,
+  googleAuth,
   accessPassword,
   setUserAccess,
   logout,

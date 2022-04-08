@@ -32,7 +32,9 @@ const getUserByCpf = async (cpf) => {
 
 //Get user by email
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+  const user = await User.findOne({ email });
+  if(!user) return null;
+  return user;
 };
 
 //update user by id
@@ -71,6 +73,7 @@ const deleteUserById = async (userId) => {
 module.exports = {
   createUser,
   queryUsers,
+  updateUserAccess,
   getUserById,
   getUserByCpf,
   getUserByEmail,

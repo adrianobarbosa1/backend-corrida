@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/register', validate(authValidation.register), authController.register);
 router.post('/login', validate(authValidation.login), authController.login);
 router.get('/auth/google',passport.authenticate('google', { session:false, scope:['openid','profile', 'email']}), authController.googleAuth);
+router.get('/auth/facebook',passport.authenticate('facebook',{ session:false, scope:['email']}), authController.facebookAuth);
 router.put('/login', authController.setAccess);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);

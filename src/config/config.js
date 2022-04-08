@@ -24,6 +24,8 @@ const envVarsSchema = Joi.object()
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+    FACEBOOK_APP_ID:Joi.string().description('this client id facebook'),
+    FACEBOOK_APP_SECRET:Joi.string().description('secret key client facebook'),
     CLIENTE_GOOGLE_ID: Joi.string().description('this cliente id google'),
     CLIENTE_GOOGLE_SECRET: Joi.string().description('secret key cliente google'),
   })
@@ -65,8 +67,12 @@ module.exports = {
     },
     from: envVars.EMAIL_FROM,
   },
-  googleAuth: {
-    googleId: envVars.CLIENTE_GOOGLE_ID,
-    googleSecret: envVars.CLIENTE_GOOGLE_SECRET,
+  google: {
+    id: envVars.CLIENTE_GOOGLE_ID,
+    secret: envVars.CLIENTE_GOOGLE_SECRET,
+  },
+  facebook: {
+    id: envVars.FACEBOOK_APP_ID,
+    secret: envVars.FACEBOOK_APP_SECRET,
   },
 };

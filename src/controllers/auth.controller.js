@@ -17,28 +17,35 @@ const login = catchAsync(async (req, res) => {
 });
 
 const googleAuth = catchAsync(async (req, res) => {
-  try {
-    req.currentUser = req.user
-
-    const token = createJwt(req.currentUser._id);
-
-    res.status('SUCCESS_MSG').json({
-      status: 'SUCCESS_MSG',
-      data: {
-        token,
-        user: {
-          id: req.currentUser._id,
-          name: req.currentUser.name,
-          email: req.currentUser.email,
-          role: req.currentUser.role,
-
-        }
+  const token = await authService.googleAuth(req.user)
+  res.status(httpStatus.SUCCESS_MSG).json({
+    status: httpStatus.SUCCESS_MSG,
+    data: {
+      token,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
       }
-    });
-  } catch (e) {
-    console.log(e.message);
-    return next('new AppError(SIGN_IN_ERR_MSG,INTERNAL_SERVER_ERROR)');
-  }
+    }
+  });
+});
+
+const facebookAuth = catchAsync(async (req, res) => {
+  const token = await authService.googleAuth(req.user)
+  res.status(httpStatus.SUCCESS_MSG).json({
+    status: httpStatus.SUCCESS_MSG,
+    data: {
+      token,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
+      }
+    }
+  });
 });
 
 const setAccess = catchAsync(async (req, res) => {
@@ -84,6 +91,7 @@ module.exports = {
   register,
   login,
   googleAuth,
+  facebookAuth,
   setAccess,
   logout,
   refreshTokens,
