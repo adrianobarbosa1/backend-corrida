@@ -2,12 +2,15 @@ const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-//Create a user
+/**
+ * Create a user
+ * @param {Object} userBody
+ * @returns {Promise<User>}
+ */
 const createUser = async (userBody) => {
-  if (await User.isCpfTaken(userBody.cpf)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'CPF already taken');
+  if (await User.isCpfTaken(userBody.cpf) && await User.isEmailTaken(userBody.email)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'CPF ou Email já existe!');
   }
-  userBody.password = '12345678';
   return User.create(userBody);
 };
 

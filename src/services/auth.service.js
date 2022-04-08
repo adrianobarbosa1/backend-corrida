@@ -7,18 +7,15 @@ const { tokenTypes } = require('../config/tokens');
 
 //Login with cpf and password
 const loginUserWithCpfOrEmail = async (body) => {
+  let user = null;
   console.log(body)
-  if (body.method === 'email') {
-    const user = await userService.getUserByEmail(body.email)
-    console.log(user)
-    return user;
-  }
-  if (body.method === 'cpf') {
-    const user = await userService.getUserByCpf(body.cpf);
-    return user;
+  if (body.username.includes('@')) {
+    user = await userService.getUserByEmail(body.username)
+  } else {
+    user = await userService.getUserByCpf(body.username);
   }
 
-  if (!user || !(await user.isPasswordMatch(password))) {
+  if (!user || !(await user.isPasswordMatch(body.password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Senha ou CPF incorreto');
   }
   return user;

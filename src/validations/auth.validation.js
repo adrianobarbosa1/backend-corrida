@@ -5,16 +5,14 @@ const register = {
   body: Joi.object().keys({
     cpf: Joi.string().length(14).required(),
     email: Joi.string().required().email(),
-    password: Joi.string(),
+    password: Joi.string().required(),
     name: Joi.string().required(),
   }),
 };
 
 const login = {
   body: Joi.object().keys({
-    method: Joi.string().required().valid('cpf','email'),
-    cpf: Joi.string().length(14).when('method', {is: 'cpf', then: Joi.required()}),
-    email: Joi.string().email().when('method', {is: 'email', then: Joi.required()}),
+    username:Joi.string().required(),
     password: Joi.string().required(),
   }),
 };
