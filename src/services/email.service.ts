@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer');
-const config = require('../config/config');
-const logger = require('../config/logger');
+import nodemailer from 'nodemailer'
+import config from '../config/config'
+import logger from '../config/logger'
 
 const apiHost = config.env === 'production' ? config.apibase : `http://localhost:${config.port}/`
 
@@ -43,7 +43,7 @@ Se você não criou uma conta, apenas ignore esse email.`;
   await sendEmail(to, subject, text);
 };
 
-module.exports = {
+export default {
   transport,
   sendEmail,
   sendResetPasswordEmail,

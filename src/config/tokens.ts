@@ -1,5 +1,5 @@
-const config = require('./config');
-const jwt = require('jsonwebtoken')
+import config from './config'
+import jwt from 'jsonwebtoken'
 
 const tokenTypes = {
   ACCESS: 'access',
@@ -23,7 +23,7 @@ const createJwt = (id) => {
         return jwt.sign({id:id},secret,{ expiresIn: jwtExpiryTime})
 }
 
-module.exports = {
+export default {
   tokenTypes,
   createJwt,
 };

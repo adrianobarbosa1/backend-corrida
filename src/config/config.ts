@@ -1,6 +1,6 @@
-const dotenv = require('dotenv');
-const path = require('path');
-const Joi = require('joi');
+import dotenv from 'dotenv'
+import path from 'path'
+import Joi from 'Joi'
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
@@ -23,11 +23,10 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
-    EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
-    FACEBOOK_APP_ID:Joi.string().description('this client id facebook'),
-    FACEBOOK_APP_SECRET:Joi.string().description('secret key client facebook'),
-    CLIENTE_GOOGLE_ID: Joi.string().description('this cliente id google'),
-    CLIENTE_GOOGLE_SECRET: Joi.string().description('secret key cliente google'),
+    FACEBOOK_APP_ID:Joi.string().required().description('this client id facebook'),
+    FACEBOOK_APP_SECRET:Joi.string().required().description('secret key client facebook'),
+    GOOGLE_CLIENT_ID: Joi.string().required().description('this cliente id google'),
+    GOOGLE_CLIENT_SECRET: Joi.string().required().description('secret key cliente google'),
   })
   .unknown();
 
@@ -37,7 +36,7 @@ if (error) {
   throw new Error(`Config validation error: ${error.message}`);
 }
 
-module.exports = {
+export default {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   apibase: envVars.APIBASE,
@@ -67,12 +66,12 @@ module.exports = {
     },
     from: envVars.EMAIL_FROM,
   },
-  google: {
-    id: envVars.CLIENTE_GOOGLE_ID,
-    secret: envVars.CLIENTE_GOOGLE_SECRET,
-  },
   facebook: {
     id: envVars.FACEBOOK_APP_ID,
     secret: envVars.FACEBOOK_APP_SECRET,
+  },
+  google: {
+    id: envVars.GOOGLE_CLIENT_ID,
+    secret: envVars.GOOGLE_CLIENT_SECRET,
   },
 };

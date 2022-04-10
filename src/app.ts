@@ -1,22 +1,24 @@
-const express = require('express');
-const helmet = require('helmet');
-const xss = require('xss-clean');
-const mongoSanitize = require('express-mongo-sanitize');
-const compression = require('compression');
-const cors = require('cors')
-const { Strategy: FacebookStrategy } = require('passport-facebook');
-const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
-const { authService } = require('./services');
-const { userService } = require('./services')
-const passport = require('passport');
-const httpStatus = require('http-status');
-const config = require('./config/config');
-const morgan = require('./config/morgan');
-const { jwtStrategy } = require('./config/passport');
-const { authLimiter } = require('./middlewares/rateLimiter');
-const routes = require('./routes/v1');
-const { errorConverter, errorHandler } = require('./middlewares/error');
-const ApiError = require('./utils/ApiError');
+import express from 'express'
+import helmet from 'helmet'
+import xss from 'xss-clean'
+import mongoSanitize from 'express-mongo-sanitize'
+import compression from 'compression'
+import cors from 'cors'
+import passport from 'passport'
+import httpStatus from 'http-status'
+import { Strategy as FacebookStrategy } from 'passport-facebook';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import {authService} from './services'
+import {userService} from './services'
+import config from './config/config'
+import morgan from './config/morgan'
+import {jwtStrategy} from './config/passport'
+import {authLimiter} from './middlewares/rateLimiter'
+import routes from './routes/v1'
+import { errorConverter, errorHandler } from './middlewares/error'
+import ApiError from './utils/ApiError'
+
+
 const app = express();
 
 //CONFIG
@@ -51,10 +53,9 @@ app.use(compression());
 
 //FACEBOOOK AUTH
 passport.use(new FacebookStrategy({
-
   clientID: config.facebook.id || '',
   clientSecret: config.facebook.secret || '',
-  callbackURL: `http://localhost:${config.port}/api/v1/auth/auth/facebook`,
+  callbackURL: `https://localhost:${config.port}/api/v1/auth/auth/facebook`,
   profileFields: ['id', 'emails', 'name'],
 
 }, async (__, _, profile, cb) => {
@@ -62,7 +63,7 @@ passport.use(new FacebookStrategy({
     const userMails = profile != null ? profile.emails : null;
 
     if (!userMails || userMails?.length === 0)
-      return cb(new ApiError(httpStatus.BAD_REQUEST, 'Email da conta do facebook é obrigatório' ), false);
+      return cb(new ApiError(httpStatus.BAD_REQUEST, 'Email da conta do facebook é obrigatório'), false);
 
     const user = await userService.getUserByEmail(userMails[0].value);
 
@@ -96,7 +97,7 @@ passport.use(new GoogleStrategy({
     const userMails = profile != null ? profile.emails : null;
 
     if (!userMails || userMails?.length === 0)
-      return done(new ApiError(httpStatus.BAD_REQUEST ,'Email da conta do Google é obrigatório'), false);
+      return done(new ApiError(httpStatus.BAD_REQUEST, 'Email da conta do Google é obrigatório'), false);
 
     const user = await userService.getUserByEmail(userMails[0].value);
 
@@ -143,4 +144,4 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-module.exports = app;
+export default app;
