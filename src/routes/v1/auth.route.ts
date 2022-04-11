@@ -8,7 +8,7 @@ import auth from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.post('/register', validate(authValidation.register), authController.register);
+router.post('/signup', validate(authValidation.signUp), authController.signUp);
 router.post('/login', validate(authValidation.login), authController.login);
 router.get('/auth/google',passport.authenticate('google', { session:false, scope:['openid','profile', 'email']}), authController.googleAuth);
 router.get('/auth/facebook',passport.authenticate('facebook',{ session:false, scope:['email']}), authController.facebookAuth);

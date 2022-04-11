@@ -1,12 +1,21 @@
+import { Request, Response } from 'express'
 import httpStatus from "http-status";
 import catchAsync from "../utils/catchAsync";
 import { authService, userService, tokenService, emailService } from "../services";
 
-const register = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
+const signUp = catchAsync(async function (req: Request, res: Response): Promise<any> {
+  const { name, email, password }: { name: string, email: string, password: string } = req.body;
+  const user = await userService.createUser(name, email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  res.status(httpStatus.CREATED).send({
+    status: 'success',
+    data: {
+      tokens,
+      user
+    }
+  });
 });
+
 
 const login = catchAsync(async (req, res) => {
   const user = await authService.loginUserWithCpfOrEmail(req.body);
@@ -86,7 +95,7 @@ const verifyEmail = catchAsync(async (req, res) => {
 });
 
 export default {
-  register,
+  signUp,
   login,
   googleAuth,
   facebookAuth,

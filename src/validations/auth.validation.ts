@@ -1,12 +1,11 @@
 const Joi = require('joi');
 const { password } = require('./custom.validation');
 
-const register = {
+const signUp = {
   body: Joi.object().keys({
-    cpf: Joi.string().length(14).required(),
+    name: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-    name: Joi.string().required(),
   }),
 };
 
@@ -51,7 +50,7 @@ const verifyEmail = {
 };
 
 export default {
-  register,
+  signUp,
   login,
   logout,
   refreshTokens,

@@ -2,16 +2,12 @@ import httpStatus from 'http-status';
 import { User } from '../models';
 import ApiError from '../utils/ApiError';
 
-/**
- * Create a user
- * @param {Object} userBody
- * @returns {Promise<User>}
- */
-const createUser = async (userBody) => {
-  if (await User.isCpfTaken(userBody.cpf) && await User.isEmailTaken(userBody.email)) {
+const createUser = async (name:string, email:string, password:string):Promise<any> => {
+    if (await getUserByEmail(email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'CPF ou Email já existe!');
   }
-  return User.create(userBody);
+  const strategy: string = 'EMAIL_PASSWORD'
+  return await User.create({name, email, password, strategy});
 };
 
 //Query for Users
@@ -31,9 +27,9 @@ const getUserByCpf = async (cpf) => {
 };
 
 //Get user by email
-const getUserByEmail = async (email) => {
+const getUserByEmail = async (email:string): Promise<any> => {
   const user = await User.findOne({ email });
-  if(!user) return null;
+  if (!user) return null;
   return user;
 };
 
