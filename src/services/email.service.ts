@@ -15,14 +15,19 @@ if (config.env !== 'test') {
 
 
 //Send an email
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to: string, subject: string, text: string) => {
   const msg = { from: config.email.from, to, subject, text };
   await transport.sendMail(msg);
 };
 
+const sendNewOauthUserEMail = async (to: string): Promise<any> => {
+  const subject = 'Corrida de rua';
+  const text = `Obrigado por se cadastrar no corrida de rua!, não responda esse email`;
+  await sendEmail(to, subject, text)
+}
 
 //Send reset password email
-const sendResetPasswordEmail = async (to, token) => {
+const sendResetPasswordEmail = async (to: string, token: string) => {
   const subject = 'Redefinição de senha';
   // replace this url with the link to the reset password page of your front-end app
   const resetPasswordUrl = `${apiHost}api/v1/auth/reset-password?token=${token}`;
@@ -33,7 +38,7 @@ Se você não solicitou a redefinição de senha, apenas ignore esse email.`;
 };
 
 //Send verification email
-const sendVerificationEmail = async (to, token) => {
+const sendVerificationEmail = async (to: string, token: string) => {
   const subject = 'Email Verification';
   // replace this url with the link to the email verification page of your front-end app
   const verificationEmailUrl = `${apiHost}api/v1/auth/verify-email?token=${token}`;
@@ -48,4 +53,5 @@ export default {
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
+  sendNewOauthUserEMail,
 };

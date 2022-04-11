@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
-import { UserDocument } from '../interfaces/model/userDocument'
 
+import { UserDocument } from '../interfaces/model/userDocument'
 import { roles } from '../config/roles'
 
 const userSchema = new mongoose.Schema({

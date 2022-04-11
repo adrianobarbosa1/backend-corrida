@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
 import httpStatus from "http-status";
+
 import catchAsync from "../utils/catchAsync";
 import { authService, userService, tokenService, emailService } from "../services";
+import { UserDocument } from '../interfaces/model/userDocument'
 
 const signUp = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { name, email, password }: { name: string, email: string, password: string } = req.body;
@@ -34,17 +36,21 @@ const signIn = catchAsync(async (req: Request, res: Response): Promise<any> => {
   });
 });
 
-const googleAuth = catchAsync(async (req, res) => {
-  const token = await authService.googleAuth(req.user)
-  res.status(httpStatus.SUCCESS_MSG).json({
-    status: httpStatus.SUCCESS_MSG,
+const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
+  req.currentUser = req.user as UserDocument;
+  console.log(req.currentUser)
+  const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
+  console.log(tokens)
+
+  res.send({
+    status: 'success',
     data: {
-      token,
+      tokens,
       user: {
-        id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-        role: req.user.role,
+        id: req.currentUser._id,
+        name: req.currentUser.name,
+        email: req.currentUser.email,
+        role: req.currentUser.role,
       }
     }
   });

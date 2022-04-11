@@ -7,7 +7,6 @@ import { Token } from '../models';
 import ApiError from '../utils/ApiError';
 import { tokenTypes } from '../config/tokens';
 
-
 //Generate token
 const generateToken = (userId: string, expires: string, type: string, secret: string = config.jwt.secret): string => {
   const payload = {
@@ -46,11 +45,11 @@ const verifyToken = async (token, type) => {
 //Generate auth tokens
 const generateAuthTokens = async (user: object) => {
   const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
-  const accessToken = generateToken(user._id, accessTokenExpires, tokenTypes.ACCESS);
+  const accessToken = generateToken(user.id, accessTokenExpires, tokenTypes.ACCESS);
 
   const refreshTokenExpires = moment().add(config.jwt.refreshExpirationDays, 'days');
   const refreshToken = generateToken(user.id, refreshTokenExpires, tokenTypes.REFRESH);
-  await saveToken(refreshToken, user.id, refreshTokenExpires, tokenTypes.REFRESH);
+  await saveToken(refreshToken, user._id, refreshTokenExpires, tokenTypes.REFRESH);
 
   return {
     access: {

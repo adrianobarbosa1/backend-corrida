@@ -17,24 +17,14 @@ const loginUserWithEmail = async (email, password) => {
   return user;
 };
 
-const createFaceBookOrGoogleUser = async (email, name, strategy) => {
-  const  user = await User.create({ email, name, strategy, password: 'O usuário não exige senha' })
-  console.log(user)
+const createFacebookOrGoogleUser = async (email: string, name: string, strategy: string): Promise<any> => {
+  const user = await User.create({ email, name, strategy, password: 'O usuário não exige senha' })
   return user;
 };
 
 const sendNewOauthUserEMail = async (email) => {
   await emailService.sendEmail(email, 'Obrigado por se juntar a nós', 'Conta criada com sucesso')
 };
-
-const googleAuth = async (reqUser) => {
-  try {
-    const token = await tokenService.createJwt(reqUser._id);
-    return token;
-  } catch (error) {
-    throw next(new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao fazer login'));
-  }
-}
 
 const accessPassword = async (user, newPassword) => {
   user.password = newPassword;
@@ -102,9 +92,8 @@ const verifyEmail = async (verifyEmailToken) => {
 
 export default {
   loginUserWithEmail,
-  createFaceBookOrGoogleUser,
+  createFacebookOrGoogleUser,
   sendNewOauthUserEMail,
-  googleAuth,
   accessPassword,
   setUserAccess,
   logout,
