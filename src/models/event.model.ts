@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const { toJSON, paginate } = require('./plugins');
+import mongoose from 'mongoose'
 
-const eventSchema = mongoose.Schema({
+const eventSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -41,11 +40,6 @@ const eventSchema = mongoose.Schema({
   },
 }, { timestamps: true });
 
-
-// add plugin that converts mongoose to json
-eventSchema.plugin(toJSON);
-eventSchema.plugin(paginate);
-
 const Event = mongoose.model("Event", eventSchema);
 
-module.exports = Event;
+export default Event;

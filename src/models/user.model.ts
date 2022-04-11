@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const { toJSON, paginate } = require('./plugins');
-const { roles } = require('../config/roles');
+import mongoose from 'mongoose'
+import validator from 'validator'
+import bcrypt from 'bcryptjs'
+
+import roles from '../config/roles'
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -50,27 +50,12 @@ const userSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-// add plugin that converts mongoose to json
-userSchema.plugin(toJSON);
-userSchema.plugin(paginate);
 
-/**
- * Check if email is taken
- * @param {string} cpf - The user's email
- * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
- * @returns {Promise<boolean>}
- */
 userSchema.statics.isCpfTaken = async function (cpf, excludeUserId) {
     const user = await this.findOne({ cpf, _id: { $ne: excludeUserId } })
     return !!user;
 };
 
-/**
- * Check if email is taken
- * @param {string} email - The user's email
- * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
- * @returns {Promise<boolean>}
- */
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
@@ -92,4 +77,4 @@ userSchema.pre('save', async function (next) {
 
 const User = mongoose.model('User', userSchema)
 
-module.exports = User;
+export default User;
