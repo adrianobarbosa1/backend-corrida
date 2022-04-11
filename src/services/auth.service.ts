@@ -106,7 +106,7 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
-module.exports = {
+export default {
   loginUserWithCpfOrEmail,
   createFaceBookOrGoogleUser,
   sendNewOauthUserEMail,
