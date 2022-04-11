@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
+import { UserDocument } from '../interfaces/model/userDocument'
 
 import { roles } from '../config/roles'
 
@@ -47,13 +48,12 @@ const userSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-//check if password matches the user's password
 userSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
   return bcrypt.compare(password, user.password);
 };
 
-userSchema.pre('save', async function (next) {
+userSchema.pre<UserDocument>('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);

@@ -7,19 +7,13 @@ import Token from '../models/token.model';
 import ApiError from '../utils/ApiError';
 import { tokenTypes } from '../config/tokens';
 
-//Login with cpf and password
-const loginUserWithCpfOrEmail = async (body) => {
-  let user = null;
-  console.log(body)
-  if (body.username.includes('@')) {
-    user = await userService.getUserByEmail(body.username)
-  } else {
-    user = await userService.getUserByCpf(body.username);
+const loginUserWithEmail = async (email, password) => {
+  const user = await userService.getUserByEmail(email)
+
+  if (!user || !(await user.isPasswordMatch(password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Senha ou email incorreto');
   }
 
-  if (!user || !(await user.isPasswordMatch(body.password))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Senha ou CPF incorreto');
-  }
   return user;
 };
 
@@ -107,7 +101,7 @@ const verifyEmail = async (verifyEmailToken) => {
 };
 
 export default {
-  loginUserWithCpfOrEmail,
+  loginUserWithEmail,
   createFaceBookOrGoogleUser,
   sendNewOauthUserEMail,
   googleAuth,

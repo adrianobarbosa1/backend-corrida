@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import catchAsync from "../utils/catchAsync";
 import { authService, userService, tokenService, emailService } from "../services";
 
-const signUp = catchAsync(async function (req: Request, res: Response): Promise<any> {
+const signUp = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { name, email, password }: { name: string, email: string, password: string } = req.body;
   const user = await userService.createUser(name, email, password);
   const tokens = await tokenService.generateAuthTokens(user);
@@ -16,11 +16,22 @@ const signUp = catchAsync(async function (req: Request, res: Response): Promise<
   });
 });
 
-
-const login = catchAsync(async (req, res) => {
-  const user = await authService.loginUserWithCpfOrEmail(req.body);
+const signIn = catchAsync(async (req: Request, res: Response): Promise<any> => {
+  const { email, password }: { email: string, password: string } = req.body;
+  const user = await authService.loginUserWithEmail(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+  res.send({
+    status: 'success',
+    data: {
+      tokens,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    }
+  });
 });
 
 const googleAuth = catchAsync(async (req, res) => {
@@ -96,7 +107,7 @@ const verifyEmail = catchAsync(async (req, res) => {
 
 export default {
   signUp,
-  login,
+  signIn,
   googleAuth,
   facebookAuth,
   setAccess,

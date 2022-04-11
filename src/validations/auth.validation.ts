@@ -9,9 +9,9 @@ const signUp = {
   }),
 };
 
-const login = {
+const signIn = {
   body: Joi.object().keys({
-    username:Joi.string().required(),
+    email:Joi.string().required(),
     password: Joi.string().required(),
   }),
 };
@@ -51,7 +51,7 @@ const verifyEmail = {
 
 export default {
   signUp,
-  login,
+  signIn,
   logout,
   refreshTokens,
   forgotPassword,
