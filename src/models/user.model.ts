@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
 
-import roles from '../config/roles'
+import {roles} from '../config/roles'
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
       required:[true, 'Uma estrategia de autenticação é obrigatório']
   },
     role: {
-        type: String,
+        type: [String],
         enum: roles,
         default: 'user',
     },

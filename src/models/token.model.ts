@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import tokenTypes from '../config/tokens'
+import {tokenTypes} from '../config/tokens'
 
 const tokenSchema = new mongoose.Schema(
   {

@@ -13,6 +13,6 @@ const createEvent = {
   })
 }
 
-module.exports = {
+export default {
   createEvent
 }

@@ -1,9 +1,9 @@
 import passport from 'passport';
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
-import roleRights from '../config/roles';
+import { roleRights } from '../config/roles';
 
-const verifyCallback = (req, resolve, reject, requiredRights) => async (err, user, info) => {
+const verifyCallback = (req: Request, resolve, reject, requiredRights) => async (err, user, info) => {
   if (err || info || !user) {
     return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
   }
@@ -28,4 +28,4 @@ const auth = (...requiredRights) => async (req, res, next) => {
     .catch((err) => next(err));
 };
 
-module.exports = auth;
+export default auth;

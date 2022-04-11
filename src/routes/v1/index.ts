@@ -1,8 +1,8 @@
-const express = require('express');
-const authRoute = require('./auth.route');
-const userRoute = require('./user.route');
-const eventRoute = require('./event.route');
-const config = require('../../config/config');
+import express from 'express';
+import authRoute from './auth.route';
+import userRoute from './user.route';
+import eventRoute from './event.route';
+import config from '../../config/config';
 
 const router = express.Router();
 
@@ -40,4 +40,4 @@ defaultRoutes.forEach((route) => {
 //   });
 // }
 
-module.exports = router;
+export default router;

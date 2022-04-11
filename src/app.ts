@@ -8,7 +8,7 @@ import passport from 'passport'
 import httpStatus from 'http-status'
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import authService from './services'
+import {authService} from './services'
 import {userService} from './services'
 import config from './config/config'
 import morgan from './config/morgan'

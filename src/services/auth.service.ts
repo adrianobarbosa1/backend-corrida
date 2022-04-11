@@ -1,11 +1,11 @@
-const httpStatus = require('http-status');
-const tokenService = require('./token.service');
-const userService = require('./user.service');
-const emailService = require('./email.service')
-const { User } = require('../models');
-const Token = require('../models/token.model');
-const ApiError = require('../utils/ApiError');
-const { tokenTypes } = require('../config/tokens');
+import httpStatus from 'http-status';
+import tokenService from './token.service';
+import userService from './user.service';
+import emailService from './email.service';
+import { User } from '../models';
+import Token from '../models/token.model';
+import ApiError from '../utils/ApiError';
+import { tokenTypes } from '../config/tokens';
 
 //Login with cpf and password
 const loginUserWithCpfOrEmail = async (body) => {

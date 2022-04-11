@@ -50,7 +50,7 @@ const verifyEmail = {
   }),
 };
 
-module.exports = {
+export default {
   register,
   login,
   logout,

@@ -23,7 +23,7 @@ const createJwt = (id) => {
         return jwt.sign({id:id},secret,{ expiresIn: jwtExpiryTime})
 }
 
-export default {
+export {
   tokenTypes,
   createJwt,
 };
