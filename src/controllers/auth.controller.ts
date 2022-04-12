@@ -38,10 +38,7 @@ const signIn = catchAsync(async (req: Request, res: Response): Promise<any> => {
 
 const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
   req.currentUser = req.user as UserDocument;
-  console.log(req.currentUser)
   const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
-  console.log(tokens)
-
   res.send({
     status: 'success',
     data: {
@@ -56,17 +53,18 @@ const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> 
   });
 });
 
-const facebookAuth = catchAsync(async (req, res) => {
-  const token = await authService.googleAuth(req.user)
-  res.status(httpStatus.SUCCESS_MSG).json({
-    status: httpStatus.SUCCESS_MSG,
+const facebookAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
+  req.currentUser = req.user as UserDocument;
+  const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
+  res.send({
+    status: 'success',
     data: {
-      token,
+      tokens,
       user: {
-        id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-        role: req.user.role,
+        id: req.currentUser._id,
+        name: req.currentUser.name,
+        email: req.currentUser.email,
+        role: req.currentUser.role,
       }
     }
   });

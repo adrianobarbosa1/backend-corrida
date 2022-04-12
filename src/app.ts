@@ -94,7 +94,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: config.facebook.id || '',
   clientSecret: config.facebook.secret || '',
-  callbackURL: `https://localhost:${config.port}/api/v1/auth/auth/facebook`,
+  callbackURL: `https://localhost:${config.port}/api/v1/auth/facebook`,
   profileFields: ['id', 'emails', 'name'],
 
 }, async (__, _, profile, cb) => {
