@@ -9,7 +9,7 @@ const signUp = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { name, email, password }: { name: string, email: string, password: string } = req.body;
   const user = await userService.createUser(name, email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({
+  res.status(httpStatus.CREATED).json({
     status: 'success',
     data: {
       tokens,
@@ -22,16 +22,16 @@ const signIn = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { email, password }: { email: string, password: string } = req.body;
   const user = await authService.loginUserWithEmail(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.send({
+  res.json({
     status: 'success',
     data: {
-      tokens,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
-      }
+      },
+      tokens
     }
   });
 });
@@ -39,7 +39,7 @@ const signIn = catchAsync(async (req: Request, res: Response): Promise<any> => {
 const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
   req.currentUser = req.user as UserDocument;
   const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
-  res.send({
+  res.json({
     status: 'success',
     data: {
       tokens,
@@ -56,7 +56,6 @@ const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> 
 const googleAuthReactSuccess = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { email, name }: { email: string, name: string } = req.body;
   const secret = req.params.secret;
-  console.log(secret)
   let user = await tokenService.getUserByToken(req.headers.authorization)
   if (!user) {
     const newUser = await authService.createFacebookOrGoogleUser(email, name, 'GOOGLE_STRATEGY');
@@ -64,7 +63,7 @@ const googleAuthReactSuccess = catchAsync(async (req: Request, res: Response): P
     user = newUser
   }
   const tokens = await tokenService.generateAuthTokens(user._id);
-  res.send({
+  res.json({
     status: 'success',
     data: {
       tokens,
@@ -81,7 +80,7 @@ const googleAuthReactSuccess = catchAsync(async (req: Request, res: Response): P
 const facebookAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
   req.currentUser = req.user as UserDocument;
   const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
-  res.send({
+  res.json({
     status: 'success',
     data: {
       tokens,
@@ -124,8 +123,7 @@ const forgotPassword = catchAsync(async (req:Request, res:Response):Promise<any>
 
 const resetPassword = catchAsync(async (req:Request, res:Response):Promise<any> => {
   const {password}: {password:string} = req.body;
-  const resetToken : string = req.query.token;
-  await authService.resetPassword(resetToken, password);
+  await authService.resetPassword(req.query.token, password);
   res.status(httpStatus.NO_CONTENT).send({
     status: 'success',
     message: 'Senha alterada faça login'
