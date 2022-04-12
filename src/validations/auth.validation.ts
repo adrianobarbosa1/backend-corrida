@@ -16,6 +16,16 @@ const signIn = {
   }),
 };
 
+const googleAuthReactSuccess = {
+  params: Joi.object().keys({
+    secret: Joi.string().required()
+  }),
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+    email: Joi.string().required().email(),
+  })
+}
+
 const logout = {
   body: Joi.object().keys({
     refreshToken: Joi.string().required(),
@@ -53,6 +63,7 @@ export default {
   signUp,
   signIn,
   logout,
+  googleAuthReactSuccess,
   refreshTokens,
   forgotPassword,
   resetPassword,

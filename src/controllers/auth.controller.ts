@@ -53,6 +53,31 @@ const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> 
   });
 });
 
+const googleAuthReactSuccess = catchAsync(async (req: Request, res: Response): Promise<any> => {
+  const { email, name }: { email: string, name: string } = req.body;
+  const secret = req.params.secret;
+  console.log(secret)
+  let user = await tokenService.getUserByToken(req.headers.authorization)
+  if (!user) {
+    const newUser = await authService.createFacebookOrGoogleUser(email, name, 'GOOGLE_STRATEGY');
+
+    user = newUser
+  }
+  const tokens = await tokenService.generateAuthTokens(user._id);
+  res.send({
+    status: 'success',
+    data: {
+      tokens,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    }
+  });
+});
+
 const facebookAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
   req.currentUser = req.user as UserDocument;
   const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
@@ -113,6 +138,7 @@ export default {
   signUp,
   signIn,
   googleAuth,
+  googleAuthReactSuccess,
   facebookAuth,
   setAccess,
   logout,
