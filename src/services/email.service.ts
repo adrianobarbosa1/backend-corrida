@@ -33,7 +33,7 @@ const sendResetPasswordEmail = async (to: string, token: string) => {
   const resetPasswordUrl = `${apiHost}api/v1/auth/reset-password?token=${token}`;
   const text = `Recuperação de senha,
 Para resetar a sua senha, click nesse link: ${resetPasswordUrl}
-Se você não solicitou a redefinição de senha, apenas ignore esse email.`;
+Se você não solicitou a redefinição de senha, apenas ignore esse email. Por favor não responda esse email`;
   await sendEmail(to, subject, text);
 };
 
