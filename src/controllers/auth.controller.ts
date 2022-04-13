@@ -9,11 +9,16 @@ const signUp = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { name, email, password }: { name: string, email: string, password: string } = req.body;
   const user = await userService.createUser(name, email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).json({
+  res.status(httpStatus.CREATED).send({
     status: 'success',
     data: {
       tokens,
-      user
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        id: user._id
+      }
     }
   });
 });

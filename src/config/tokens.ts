@@ -1,14 +1,14 @@
 import config from './config'
 import jwt from 'jsonwebtoken'
 
-const tokenTypes = {
+export const tokenTypes = {
   ACCESS: 'access',
   REFRESH: 'refresh',
   RESET_PASSWORD: 'resetPassword',
   VERIFY_EMAIL: 'verifyEmail',
 };
 
-const createJwt = (id) => {
+export const createJwt = (id) => {
   const secret = config.secret;
         const jwtExpiryTime = config.accessExpirationMinutes;
 
@@ -22,8 +22,3 @@ const createJwt = (id) => {
 
         return jwt.sign({id:id},secret,{ expiresIn: jwtExpiryTime})
 }
-
-export {
-  tokenTypes,
-  createJwt,
-};

@@ -3,10 +3,5 @@ const allRoles = {
   admin: ['getUsers', 'manageUsers', 'adminEvent'],
 };
 
-const roles = Object.keys(allRoles);
-const roleRights = new Map(Object.entries(allRoles));
-
-export {
-  roles,
-  roleRights,
-};
+export const roles = Object.keys(allRoles);
+export const roleRights = new Map(Object.entries(allRoles));

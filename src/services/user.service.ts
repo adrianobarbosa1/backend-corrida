@@ -4,7 +4,7 @@ import ApiError from '../utils/ApiError';
 
 const createUser = async (name: string, email: string, password: string): Promise<any> => {
   if (await getUserByEmail(email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'CPF ou Email já existe!');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email já existe!');
   }
   const strategy: string = 'EMAIL_PASSWORD'
   return await User.create({ name, email, password, strategy });
