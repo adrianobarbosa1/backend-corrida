@@ -8,5 +8,10 @@ const router = express.Router();
 
 router
   .post('/create', auth(), validate(athleteValidation.createAthlete), athleteController.createAthlete);
+  /*
+  .get
+  .patch
+  .delete
+  */
 
 export default router;
