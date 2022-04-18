@@ -9,52 +9,27 @@ const signUp = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { name, email, password }: { name: string, email: string, password: string } = req.body;
   const user = await userService.createUser(name, email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({
-    status: 'success',
-    data: {
-      tokens,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        id: user._id
-      }
-    }
-  });
+  res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
 const signIn = catchAsync(async (req: Request, res: Response): Promise<any> => {
   const { email, password }: { email: string, password: string } = req.body;
   const user = await authService.loginUserWithEmail(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.json({
-    status: 'success',
-    data: {
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      tokens
-    }
-  });
+  res.send({ user, tokens });
 });
 
 const googleAuth = catchAsync(async (req: Request, res: Response): Promise<any> => {
-  req.currentUser = req.user as UserDocument;
-  const tokens = await tokenService.generateAuthTokens(req.currentUser._id);
+  const user = req.user as UserDocument;
+  const tokens = await tokenService.generateAuthTokens(user._id);
   res.json({
-    status: 'success',
-    data: {
-      tokens,
-      user: {
-        id: req.currentUser._id,
-        name: req.currentUser.name,
-        email: req.currentUser.email,
-        role: req.currentUser.role,
-      }
-    }
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+    tokens
   });
 });
 
@@ -116,8 +91,8 @@ const refreshTokens = catchAsync(async (req, res) => {
   res.send({ ...tokens });
 });
 
-const forgotPassword = catchAsync(async (req:Request, res:Response):Promise<any> => {
-  const {email}: {email:string} = req.body;
+const forgotPassword = catchAsync(async (req: Request, res: Response): Promise<any> => {
+  const { email }: { email: string } = req.body;
   const resetPasswordToken = await tokenService.generateResetPasswordToken(email);
   await emailService.sendResetPasswordEmail(email, resetPasswordToken);
   res.status(httpStatus.NO_CONTENT).json({
@@ -126,8 +101,8 @@ const forgotPassword = catchAsync(async (req:Request, res:Response):Promise<any>
   });
 });
 
-const resetPassword = catchAsync(async (req:Request, res:Response):Promise<any> => {
-  const {password}: {password:string} = req.body;
+const resetPassword = catchAsync(async (req: Request, res: Response): Promise<any> => {
+  const { password }: { password: string } = req.body;
   await authService.resetPassword(req.query.token, password);
   res.status(httpStatus.NO_CONTENT).send({
     status: 'success',

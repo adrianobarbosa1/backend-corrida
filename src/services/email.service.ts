@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import config from '../config/config'
-import logger from '../config/logger'
+import {logger} from '../config/logger'
 
 const apiHost = config.env === 'production' ? config.apibase : `http://localhost:${config.port}/`
 

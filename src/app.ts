@@ -1,6 +1,5 @@
 import express from 'express'
 import helmet from 'helmet'
-import xss from 'xss-clean'
 import mongoSanitize from 'express-mongo-sanitize'
 import compression from 'compression'
 import cors from 'cors'
@@ -14,12 +13,11 @@ import { userService } from './services'
 import { emailService } from './services'
 import config from './config/config'
 import morgan from './config/morgan'
-import jwtStrategy from './config/passport'
+import {jwtStrategy} from './config/passport'
 import { authLimiter } from './middlewares/rateLimiter'
 import routes from './routes/v1'
 import { errorConverter, errorHandler } from './middlewares/error'
 import ApiError from './utils/ApiError'
-
 
 const app = express();
 
@@ -32,7 +30,6 @@ if (config.env !== 'test') {
 // ENABLE CORS
 if (config.env === 'development') {
   app.use(cors());
-  app.options('*', cors());
 }
 
 //SECURITY HTTP HEADERS REQUEST BODY
@@ -47,7 +44,6 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(express.urlencoded({ extended: true, limit: 1.5 * 1024 * 1024 }));
 
 //SANITIZE REQUEST DATA
-app.use(xss());
 app.use(mongoSanitize());
 
 //GZIP COMPRESSION
@@ -65,7 +61,7 @@ passport.use(new GoogleStrategy({
     const userMails = profile != null ? profile.emails : null;
 
     if (!userMails || userMails?.length === 0)
-      return done(new ApiError(httpStatus.BAD_REQUEST, 'Email da conta do Google é obrigatório'), false);
+      return done(new ApiError(`${httpStatus.BAD_REQUEST}`, 'Email da conta do Google é obrigatório', false));
 
     const user = await userService.getUserByEmail(userMails[0].value);
 
@@ -74,7 +70,7 @@ passport.use(new GoogleStrategy({
 
       const user = await authService.createFacebookOrGoogleUser(userMails[0].value, name, 'GOOGLE_STRATEGY');
 
-      if (!user) return done(new ApiError(httpStatus.BAD_REQUEST, 'Falha de autenticação com Google'), false);
+      if (!user) return done(new ApiError(`${httpStatus.BAD_REQUEST}`, 'Falha de autenticação com Google'), false);
 
       await emailService.sendNewOauthUserEMail(userMails[0].value);
 
@@ -84,8 +80,7 @@ passport.use(new GoogleStrategy({
     done('', user);
 
   } catch (e) {
-    console.log(e.message);
-    return done(new ApiError(httpStatus.BAD_REQUEST, 'Falha de autenticação com Google'), false);
+    return done(new ApiError(`${httpStatus.BAD_REQUEST}`, 'Falha de autenticação com Google'), false);
   }
 }
 ));
@@ -102,7 +97,7 @@ passport.use(new FacebookStrategy({
     const userMails = profile != null ? profile.emails : null;
 
     if (!userMails || userMails?.length === 0)
-      return cb(new ApiError(httpStatus.BAD_REQUEST, 'Email da conta do facebook é obrigatório'), false);
+      return cb(new ApiError(`${httpStatus.BAD_REQUEST}`, 'Email da conta do facebook é obrigatório'), false);
 
     const user = await userService.getUserByEmail(userMails[0].value);
 
@@ -110,7 +105,7 @@ passport.use(new FacebookStrategy({
       const name = profile.name?.givenName + " " + profile.name?.familyName;
       const user = await authService.createFacebookOrGoogleUser(userMails[0].value, name, 'FACEBOOK_STRATEGY');
 
-      if (!user) return cb(new ApiError('Falha de autenticação com Facebook', httpStatus.BAD_REQUEST), false);
+      if (!user) return cb(new ApiError('Falha de autenticação com Facebook', `${httpStatus.BAD_REQUEST}`), false);
 
       await emailService.sendNewOauthUserEMail(userMails[0].value);
 
@@ -118,15 +113,14 @@ passport.use(new FacebookStrategy({
     }
     cb(null, user);
   } catch (e) {
-    console.log(e.message);
-    return cb(new ApiError('Falha de autenticação com Facebook', httpStatus.BAD_REQUEST), false);
+    return cb(new ApiError('Falha de autenticação com Facebook', `${httpStatus.BAD_REQUEST}`), false);
   }
 
 }));
 
 // jwt authentication
 app.use(passport.initialize());
-// passport.use('jwt', jwtStrategy);
+passport.use('jwt', jwtStrategy);
 
 // limit repeated failed requests to auth endpoints
 if (config.env === 'production') {
@@ -138,7 +132,7 @@ app.use('/api/v1', routes);
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+  next(new ApiError(`${httpStatus.NOT_FOUND}`, 'Not found'));
 });
 
 // convert error to ApiError, if needed

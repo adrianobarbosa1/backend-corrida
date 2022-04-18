@@ -2,23 +2,16 @@ import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
 import eventRoute from './event.route';
+import athleteRoute from './athlete.route';
 import config from '../../config/config';
 
 const router = express.Router();
 
 const defaultRoutes = [
-  {
-    path: '/auth',
-    route: authRoute,
-  },
-  {
-    path: '/users',
-    route: userRoute,
-  },
-  {
-    path: '/event',
-    route: eventRoute,
-  },
+  { path: '/auth', route: authRoute },
+  { path: '/users', route: userRoute },
+  { path: '/event', route: eventRoute },
+  { path: '/athlete', route: athleteRoute },
 ];
 
 // const devRoutes = [

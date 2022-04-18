@@ -21,6 +21,6 @@ const runningGroupSchema = mongoose.Schema({
 runningGroupSchema.plugin(toJSON);
 runningGroupSchema.plugin(paginate);
 
-const Register = mongoose.model("RunningGroup", runningGroupSchema);
+const RunningGroup = mongoose.model("RunningGroup", runningGroupSchema);
 
-module.exports = Register;
+module.exports = RunningGroup;

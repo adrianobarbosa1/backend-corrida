@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 
 import { UserDocument } from '../interfaces/model/userDocument'
 import { roles } from '../config/roles'
+import {toJSON} from './plugins'
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -47,6 +48,8 @@ const userSchema = new mongoose.Schema({
     default: false
   },
 }, { timestamps: true });
+
+userSchema.plugin(toJSON);
 
 userSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
