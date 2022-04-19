@@ -1,4 +1,6 @@
 import Joi from "joi";
+import { objectId } from "./custom.validation";
+
 
 const createAthlete = {
   body: Joi.object().keys({
@@ -18,6 +20,14 @@ const createAthlete = {
     complemento: Joi.string().optional().allow(''),
   })
 }
+
+const getAthlete = {
+  params: Joi.object().keys({
+    athleteId: Joi.string().custom(objectId),
+  }),
+};
+
 export default {
-  createAthlete
+  createAthlete,
+  getAthlete
 }
