@@ -17,7 +17,14 @@ const getAthlete = catchAsync(async (req: Request, res:Response)=>{
   res.status(httpStatus.CREATED).send(athlete);
 })
 
+const updateAthlete = catchAsync(async (req: Request, res: Response) => {
+  const athlete = await athleteService.updateAthleteById(req.params.athleteId, req.body);
+  res.send(athlete);
+});
+
+
 export default {
   createAthlete,
-  getAthlete
+  getAthlete,
+  updateAthlete
 }
