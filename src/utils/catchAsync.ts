@@ -1,5 +1,6 @@
-const catchAsync = (fn) => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch((err) => next(err));
-};
+import { NextFunction, Request, Response } from 'express';
 
-export default catchAsync;
+export const catchAsync =
+  (fn: any) => (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch((err) => next(err));
+  };

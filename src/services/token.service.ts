@@ -1,14 +1,20 @@
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import httpStatus from 'http-status';
 import config from '../config/config';
 import userService from './user.service';
 import { Token } from '../models';
 import ApiError from '../utils/ApiError';
-import { tokenTypes } from '../config/tokens';
+import { TokenTypes } from '../config/tokenTypes.enum';
+import { UserInterface } from '../interfaces/user.interface';
 
 //Generate token
-const generateToken = (userId: string, expires: string, type: string, secret: string = config.jwt.secret): string => {
+const generateToken = (
+  userId: string,
+  expires: Moment,
+  type: string,
+  secret: string = config.jwt.secret
+): string => {
   const payload = {
     sub: userId,
     iat: moment().unix(),
@@ -17,7 +23,6 @@ const generateToken = (userId: string, expires: string, type: string, secret: st
   };
   return jwt.sign(payload, secret);
 };
-
 
 //Save a token
 const saveToken = async (token, userId, expires, type, blacklisted = false) => {
@@ -31,11 +36,15 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
   return tokenDoc;
 };
 
-
 //Verify token and return token doc (or throw an error if it is not valid)
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, config.jwt.secret);
-  const tokenDoc = await Token.findOne({ token, type, user: payload.sub, blacklisted: false });
+  const tokenDoc = await Token.findOne({
+    token,
+    type,
+    user: payload.sub,
+    blacklisted: false,
+  });
   if (!tokenDoc) {
     throw new Error('Token not found');
   }
@@ -43,13 +52,13 @@ const verifyToken = async (token, type) => {
 };
 
 //Generate auth tokens
-const generateAuthTokens = async (user: object) => {
+const generateAuthTokens = async (user: UserInterface) => {
   const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
-  const accessToken = generateToken(user.id, accessTokenExpires, tokenTypes.ACCESS);
+  const accessToken = generateToken(user._id, accessTokenExpires, TokenTypes.ACCESS);
 
   const refreshTokenExpires = moment().add(config.jwt.refreshExpirationDays, 'days');
-  const refreshToken = generateToken(user.id, refreshTokenExpires, tokenTypes.REFRESH);
-  await saveToken(refreshToken, user._id, refreshTokenExpires, tokenTypes.REFRESH);
+  const refreshToken = generateToken(user._id, refreshTokenExpires, TokenTypes.REFRESH);
+  await saveToken(refreshToken, user._id, refreshTokenExpires, TokenTypes.REFRESH);
 
   return {
     access: {
@@ -73,7 +82,7 @@ const getUserByToken = async (authorization) => {
   const userId = tokenUser.user.toHexString();
   const user = await userService.getUserById(tokenUser.user);
   return user;
-}
+};
 
 //Generate reset password token
 const generateResetPasswordToken = async (email) => {
@@ -82,16 +91,16 @@ const generateResetPasswordToken = async (email) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Nenhum usuario encontrado com ess email');
   }
   const expires = moment().add(config.jwt.resetPasswordExpirationMinutes, 'minutes');
-  const resetPasswordToken = generateToken(user.id, expires, tokenTypes.RESET_PASSWORD);
-  await saveToken(resetPasswordToken, user.id, expires, tokenTypes.RESET_PASSWORD);
+  const resetPasswordToken = generateToken(user.id, expires, TokenTypes.RESET_PASSWORD);
+  await saveToken(resetPasswordToken, user.id, expires, TokenTypes.RESET_PASSWORD);
   return resetPasswordToken;
 };
 
 //Generate verify email token
 const generateVerifyEmailToken = async (user) => {
   const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
-  const verifyEmailToken = generateToken(user.id, expires, tokenTypes.VERIFY_EMAIL);
-  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+  const verifyEmailToken = generateToken(user.id, expires, TokenTypes.VERIFY_EMAIL);
+  await saveToken(verifyEmailToken, user.id, expires, TokenTypes.VERIFY_EMAIL);
   return verifyEmailToken;
 };
 

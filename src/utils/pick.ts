@@ -4,7 +4,7 @@
  * @param {string[]} keys
  * @returns {Object}
  */
-const pick = (object, keys) => {
+const pick = (object: object, keys: string[]): object => {
   return keys.reduce((obj, key) => {
     if (object && Object.prototype.hasOwnProperty.call(object, key)) {
       // eslint-disable-next-line no-param-reassign

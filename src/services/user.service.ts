@@ -1,12 +1,17 @@
 import httpStatus from 'http-status';
+import { IUserRequest, UserInterface } from '../interfaces/user.interface';
 import { User } from '../models';
 import ApiError from '../utils/ApiError';
 
-const createUser = async (name: string, email: string, password: string): Promise<any> => {
+const createUser = async ({
+  name,
+  email,
+  password,
+}: IUserRequest): Promise<UserInterface> => {
   if (await getUserByEmail(email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email já existe!');
+    throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Email já existe!');
   }
-  const strategy: string = 'EMAIL_PASSWORD'
+  const strategy: string = 'EMAIL_PASSWORD';
   return await User.create({ name, email, password, strategy });
 };
 
@@ -50,9 +55,9 @@ const updateUserById = async (userId, updateBody) => {
 const updateUserAccess = async (userId) => {
   const user = await getUserById(userId);
   user.access = 1;
-  await user.save()
+  await user.save();
   return user;
-}
+};
 
 //Delete user by id
 const deleteUserById = async (userId) => {
@@ -75,4 +80,4 @@ export default {
   getUserByEmail,
   updateUserById,
   deleteUserById,
-}
+};

@@ -1,5 +1,6 @@
-import mongoose from 'mongoose'
-import {tokenTypes} from '../config/tokens'
+import mongoose from 'mongoose';
+import { TokenTypes } from '../config/tokenTypes.enum';
+import { TokenInterface } from '../interfaces/token.interface';
 
 const tokenSchema = new mongoose.Schema(
   {
@@ -15,7 +16,7 @@ const tokenSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [tokenTypes.REFRESH, tokenTypes.RESET_PASSWORD, tokenTypes.VERIFY_EMAIL],
+      enum: [TokenTypes.REFRESH, TokenTypes.RESET_PASSWORD, TokenTypes.VERIFY_EMAIL],
       required: true,
     },
     expires: {
@@ -32,6 +33,6 @@ const tokenSchema = new mongoose.Schema(
   }
 );
 
-const Token = mongoose.model('Token', tokenSchema);
+const Token = mongoose.model<TokenInterface>('Token', tokenSchema);
 
 export default Token;

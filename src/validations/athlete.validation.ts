@@ -1,7 +1,6 @@
 import Joi from "joi";
 import { objectId, password } from "./custom.validation";
 
-
 const createAthlete = {
   body: Joi.object().keys({
     cpf: Joi.string().length(14).required(),
