@@ -1,14 +1,11 @@
 import httpStatus from 'http-status';
-import { Athlete } from '../models';
+import { Dependents } from '../models';
 import { AthleteDocument } from '../models/athlete.model';
 import ApiError from '../utils/ApiError';
 
-const createAthlete = async (athlete: AthleteDocument, user) => {
-  if (await Athlete.findOne({ user: user._id })) {
-    throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Athleta já existe');
-  }
-  athlete.user = user;
-  return Athlete.create(athlete);
+const createTeam = async (team, user) => {
+  team.user = user;
+  return Team.create(team);
 };
 
 const getAthleteById = async (id: string) => {
@@ -29,7 +26,7 @@ const updateAthleteById = async (id, updateBody) => {
 };
 
 export default {
-  createAthlete,
+  createDependents,
   getAthleteById,
   updateAthleteById,
 };

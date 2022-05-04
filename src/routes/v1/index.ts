@@ -2,7 +2,9 @@ import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
 import eventRoute from './event.route';
+import teamRoute from './team.route';
 import athleteRoute from './athlete.route';
+import dependetsRoute from './dependets.route';
 import config from '../../config/config';
 
 const router = express.Router();
@@ -12,6 +14,8 @@ const defaultRoutes = [
   { path: '/users', route: userRoute },
   { path: '/event', route: eventRoute },
   { path: '/athlete', route: athleteRoute },
+  { path: '/team', route: teamRoute },
+  { path: '/dependents', route: dependetsRoute },
 ];
 
 // const devRoutes = [

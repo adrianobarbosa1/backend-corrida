@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
-import app from  "./app";
-import config from "./config/config";
-import {logger}  from "./config/logger";
+import mongoose from 'mongoose';
+import app from './app';
+import config from './config/config';
+import { logger } from './config/logger';
 
 interface MongooseOptions {
-  useNewUrlParser: boolean,
-  useUnifiedTopology: boolean
+  useNewUrlParser: boolean;
+  useUnifiedTopology: boolean;
 }
 
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
@@ -19,7 +19,7 @@ const server = app.listen(config.port, () => {
 const exitHandler = () => {
   if (server) {
     server.close(() => {
-      logger.info('Server closed');
+      logger.info('Server close');
       process.exit(1);
     });
   } else {

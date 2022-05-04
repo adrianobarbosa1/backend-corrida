@@ -5,17 +5,25 @@ import { catchAsync } from '../utils/catchAsync';
 import { authService, userService, tokenService, emailService } from '../services';
 import { UserInterface } from '../interfaces/user.interface';
 
-const signUp = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const user = await userService.createUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+const createTeam = catchAsync(async (req: Request, res: Response) => {
+  const team = await teamService.createTeam(req.body, req.user);
+
+  res.status(httpStatus.CREATED).json({
+    dependente: {
+      id: dependents._id,
+      name: dependents.name,
+      genre: dependents.genre,
+      dt_nascimento: dependents.dt_nascimento,
+    },
+  });
 });
 
-const signIn = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const { email, password }: { email: string; password: string } = req.body;
-  const user = await authService.loginUserWithEmail(email, password);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+const getTeam = catchAsync(async (req: Request, res: Response) => {
+  var team = await athleteService.getAthleteById(req.params.athleteId);
+  if (!athlete) {
+    throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
+  }
+  res.status(httpStatus.CREATED).send(athlete);
 });
 
 const googleAuth = catchAsync(async (req: Request, res: Response) => {
