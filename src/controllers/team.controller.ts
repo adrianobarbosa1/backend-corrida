@@ -20,14 +20,6 @@ const createTeam = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const uploadImg = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.user;
-  const { logo } = req.file.filename;
-
-  const updateUserAvatarUseCase = container.resolve(updateLogo);
-});
-
 export default {
   createTeam,
-  uploadImg,
 };

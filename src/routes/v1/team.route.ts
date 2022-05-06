@@ -7,7 +7,6 @@ import { teamController } from '../../controllers';
 const router = express.Router();
 
 router.post('/create', auth(), validate(teamValidation.createTeam), teamController.createTeam);
-router.post('/upload', auth(), validate(teamValidation.uploadImg), teamController.uploadImg);
 
 // .get('/:athleteId', auth(), validate(athleteValidation.getAthlete), athleteController.getAthlete)
 // .patch(
