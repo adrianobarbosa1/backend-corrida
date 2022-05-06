@@ -1,17 +1,13 @@
 import express from 'express';
-import auth from '../../middlewares/auth';
+import { auth } from '../../middlewares/auth';
 import validate from '../../middlewares/validate';
-import { dependentsValidation } from '../../validations';
-import { dependentsController } from '../../controllers';
+import { teamValidation } from '../../validations';
+import { teamController } from '../../controllers';
 
 const router = express.Router();
 
-router.post(
-  '/create',
-  auth(),
-  validate(dependentsValidation.createDependents),
-  dependentsController.createDependents
-);
+router.post('/create', auth(), validate(teamValidation.createTeam), teamController.createTeam);
+router.post('/upload', auth(), validate(teamValidation.uploadImg), teamController.uploadImg);
 
 // .get('/:athleteId', auth(), validate(athleteValidation.getAthlete), athleteController.getAthlete)
 // .patch(

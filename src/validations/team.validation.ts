@@ -4,11 +4,17 @@ import { objectId, password } from './custom.validation';
 
 const createTeam = {
   body: Joi.object().keys({
-    name: Joi.string().length(14).required(),
-    photo: Joi.string().optional().allow(''),
+    name: Joi.string().required(),
+    logo: Joi.string().optional().allow(''),
     phrase: Joi.string().optional().allow(''),
     description: Joi.string().optional().allow(''),
     invite_code: Joi.string().optional().allow(''),
+  }),
+};
+
+const uploadImg = {
+  body: Joi.object().keys({
+    logo: Joi.string().dataUri().optional().allow(''),
   }),
 };
 
@@ -44,6 +50,7 @@ const updateAthlete = {
 
 export default {
   createTeam,
+  uploadImg,
   getAthlete,
   updateAthlete,
 };

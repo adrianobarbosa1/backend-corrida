@@ -1,46 +1,40 @@
-const mongoose = require("mongoose");
-const { toJSON, paginate } = require('./plugins');
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import { toJSON, paginate } from './plugins';
 
-const teamSchema = mongoose.Schema({
-  athlete: {
-    type: Schema.Types.ObjectId,
-    ref: 'Athlete'
+const teamSchema = new mongoose.Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    logo: {
+      data: Buffer,
+      contentType: String,
+    },
+    phrase: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+    invite_code: {
+      type: String,
+    },
+    deletado: {
+      type: Boolean,
+      default: false,
+    },
   },
-  name: {
-    type: String,
-    required: true,
-  },
-  leader: {
-    type: String,
-    required: true,
-  },
-  logo: {
-    type: String,
-    required: true,
-  },
-  phrase: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  inviteCode: {
-    type: String,
-    required: true,
-  },
-  deletado: {
-    type: Boolean,
-    default: false,
-  },
-}, { timestamps: true });
-
+  { timestamps: true }
+);
 
 // add plugin that converts mongoose to json
 teamSchema.plugin(toJSON);
 teamSchema.plugin(paginate);
 
-const Team = mongoose.model("Team", teamSchema);
-
-module.exports = Team;
+export const Team = mongoose.model('Team', teamSchema);

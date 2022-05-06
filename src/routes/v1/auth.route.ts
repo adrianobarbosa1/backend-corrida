@@ -4,7 +4,7 @@ import passport from 'passport'
 import validate from '../../middlewares/validate';
 import { authValidation } from '../../validations';
 import { authController } from '../../controllers';
-import auth from '../../middlewares/auth';
+import {auth} from '../../middlewares/auth';
 
 const router = express.Router();
 
