@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
-import { container } from 'tsyringe';
 
 import { catchAsync } from '../utils/catchAsync';
-import { authService, userService, tokenService, emailService, teamService } from '../services';
-import { UserInterface } from '../interfaces/user.interface';
+import { teamService } from '../services';
 
 const createTeam = catchAsync(async (req: Request, res: Response) => {
   const team = await teamService.createTeam(req.body, req.user);
@@ -20,6 +18,13 @@ const createTeam = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const uploadImg = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params
+  const team = await teamService.uploadImg(req.file, id)
+  res.send(team)
+});
+
 export default {
   createTeam,
+  uploadImg
 };

@@ -1,6 +1,6 @@
 import multer from 'multer';
 import path from 'path';
-import crypto from 'crypto';
+
 
 //UPLOAD DE IMAGEM
 const storage = multer.diskStorage({
@@ -8,7 +8,11 @@ const storage = multer.diskStorage({
     cb(null, path.resolve(__dirname, '..', '..', 'tmp', 'uploads'));
   },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + '.jpg');
+    const fileName = `${Date.now()}-${file.originalname}`
+    cb(null, fileName)
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024
   },
   fileFilter: (req, file, cb) => {
     const allowedMimes = ['image/jpg', 'image/gif', 'image/pjpeg', 'image/png', 'image/jpeg'];
@@ -18,9 +22,8 @@ const storage = multer.diskStorage({
       cb(new Error('Arquivo com formato inválido'));
     }
 
-    // Se o arquivo não bateu com nenhum aceito, executamos o callback com o segundo valor false (validação falhouo)
     return cb(null, false);
   },
 });
 
-export const upload = multer({ storage });
+export const multerConfig = multer({ storage });
