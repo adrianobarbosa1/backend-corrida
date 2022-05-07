@@ -4,6 +4,7 @@ const { toJSON, paginate } = require('./plugins');
 const runningGroupSchema = mongoose.Schema({
   name: {
     type: String,
+    uppercase: true,
     required: true,
   },
   criterion: {

@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      uppercase: true,
       required: [true, 'Nome é obrigatório'],
       trim: true,
     },

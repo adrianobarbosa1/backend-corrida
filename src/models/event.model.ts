@@ -4,6 +4,7 @@ const eventSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      uppercase: true,
       required: true,
       trim: true,
     },
