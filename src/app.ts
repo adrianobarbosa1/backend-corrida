@@ -13,7 +13,7 @@ import { userService } from './services'
 import { emailService } from './services'
 import config from './config/config'
 import morgan from './config/morgan'
-import {jwtStrategy} from './config/passport'
+import { jwtStrategy } from './config/passport'
 import { authLimiter } from './middlewares/rateLimiter'
 import routes from './routes/v1'
 import { errorConverter, errorHandler } from './middlewares/error'
@@ -47,7 +47,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 
 //GZIP COMPRESSION
-app.use(compression());
+app.use(compression({
+  level: 6,
+  threshold: 10 * 1000,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res)
+  }
+}));
 
 //Google oauth 2.0
 passport.use(new GoogleStrategy({
