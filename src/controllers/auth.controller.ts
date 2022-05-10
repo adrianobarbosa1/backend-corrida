@@ -14,8 +14,20 @@ const signUp = catchAsync(async (req: Request, res: Response): Promise<void> => 
 const signIn = catchAsync(async (req: Request, res: Response): Promise<void> => {
   const { email, password }: { email: string; password: string } = req.body;
   const user = await authService.loginUserWithEmail(email, password);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+  const token = await tokenService.generateAuthTokens(user);
+  res.json({
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      strategy: user.strategy,
+      role: user.role,
+      isEmailVerifield: user.isEmailVerifield,
+      deletado: user.deletado,
+      token: token,
+    },
+  });
 });
 
 const googleAuth = catchAsync(async (req: Request, res: Response) => {
