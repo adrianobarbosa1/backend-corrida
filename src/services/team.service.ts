@@ -12,14 +12,13 @@ const createTeam = async (team, user) => {
   return Team.create(team);
 };
 
-const uploadImg = async (reqFile, idTeam) => {
+const uploadImg = async (file, idTeam) => {
   const team = await Team.findById(idTeam);
   if (!team) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Time não encontrado');
   }
-
-  const file = fs.readFileSync(`${reqFile.path}`);
-  const base64file = Buffer.from(file).toString('base64');
+  console.log(file.buffer)
+  const base64file = Buffer.from(file.buffer).toString('base64');
 
   team.logo = base64file;
   return await team.save();
