@@ -10,10 +10,10 @@ export interface AthleteDocument extends Document {
   rg: string;
   uf_rg: string;
   genero: string;
+  fone: string;
   dt_nascimento: Date;
   tipo_sanguineo: string;
   alergia: string;
-  fone: string;
   pais: string;
   cep: string;
   uf: string;
@@ -35,6 +35,7 @@ const athleteSchema = new mongoose.Schema(
     rg: { type: String, unique: true, required: true },
     uf_rg: { type: String, required: true },
     genero: { type: String, required: true },
+    fone: { type: String, required: true },
     dt_nascimento: { type: Date, required: true },
     pais: { type: String, required: true },
     cep: { type: String, required: true },

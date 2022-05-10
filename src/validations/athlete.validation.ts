@@ -7,7 +7,10 @@ const createAthlete = {
     rg: Joi.string().required(),
     uf_rg: Joi.string().required(),
     genero: Joi.string().required(),
+    fone: Joi.string().required(),
     dt_nascimento: Joi.date().required(),
+    tipo_sanguineo: Joi.string(),
+    alergia: Joi.string(),
     pais: Joi.string().required(),
     cep: Joi.string().required(),
     uf: Joi.string().required(),
@@ -17,8 +20,6 @@ const createAthlete = {
     quadra: Joi.string().required(),
     lote: Joi.string().optional().allow(''),
     complemento: Joi.string().optional().allow(''),
-    tipo_sanguineo: Joi.string().optional().allow(''),
-    alergia: Joi.string().optional().allow(''),
   }),
 };
 
@@ -30,7 +31,7 @@ const getAthlete = {
 
 const updateAthlete = {
   params: Joi.object().keys({
-    athleteId: Joi.required().custom(objectId),
+    userId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
@@ -38,7 +39,10 @@ const updateAthlete = {
       rg: Joi.string().required(),
       uf_rg: Joi.string().required(),
       genero: Joi.string().required(),
+      fone: Joi.string().required(),
       dt_nascimento: Joi.date().required(),
+      tipo_sanguineo: Joi.string(),
+      alergia: Joi.string(),
       pais: Joi.string().required(),
       cep: Joi.string().required(),
       uf: Joi.string().required(),
