@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
+import uniqueValidator from 'mongoose-unique-validator';
 import bcrypt from 'bcryptjs';
 
 import { UserInterface } from '../interfaces/user.interface';
@@ -11,12 +12,12 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       uppercase: true,
-      required: [true, 'Nome é obrigatório'],
+      required: true,
       trim: true,
     },
     email: {
       type: String,
-      required: [true, 'Email é obrigatório'],
+      required: true,
       unique: true,
       trim: true,
       lowercase: true,
@@ -30,11 +31,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: 6,
       trim: true,
-      required: [true, 'A senha é obrigatória'],
+      required: true,
+    },
+    registered: {
+      type: Boolean,
+      default: false,
     },
     strategy: {
       type: String,
-      required: [true, 'Uma estrategia de autenticação é obrigatório'],
+      required: true,
     },
     role: {
       type: [String],
@@ -54,6 +59,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.plugin(toJSON);
+userSchema.plugin(uniqueValidator, { message: 'já esta sendo utilizado' });
 
 userSchema.methods.isPasswordMatch = async function (password) {
   const user = this;

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Types, Schema, Document } from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 import { toJSON } from './plugins';
 
 export interface AthleteDocument extends Document {
@@ -28,16 +29,15 @@ export interface AthleteDocument extends Document {
 
 const athleteSchema = new mongoose.Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
-    team: { type: Schema.Types.ObjectId, ref: 'Team' },
-    running_group: { type: Schema.Types.ObjectId, ref: 'RunningGroup' },
+    user: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    team: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
+    running_group: [{ type: Schema.Types.ObjectId, ref: 'RunningGroup' }],
     cpf: { type: String, unique: true, required: true },
     rg: { type: String, unique: true, required: true },
     uf_rg: { type: String, required: true },
     genero: { type: String, required: true },
     fone: { type: String, required: true },
     dt_nascimento: { type: Date, required: true },
-    pais: { type: String, required: true },
     cep: { type: String, required: true },
     uf: { type: String, required: true },
     municipio: { type: String, required: true },
@@ -54,5 +54,6 @@ const athleteSchema = new mongoose.Schema(
 );
 
 athleteSchema.plugin(toJSON);
+athleteSchema.plugin(uniqueValidator, { message: 'já esta sendo utilizado' });
 
 export const Athlete = mongoose.model<AthleteDocument>('Athlete', athleteSchema);

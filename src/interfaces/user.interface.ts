@@ -5,6 +5,7 @@ export interface UserInterface extends Document {
   email: string;
   password: string;
   strategy: string;
+  registered: boolean;
   role?: string;
   isEmailVerified: boolean;
   deletado: boolean;

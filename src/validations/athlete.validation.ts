@@ -3,27 +3,28 @@ import { objectId, password } from './custom.validation';
 
 const createAthlete = {
   body: Joi.object().keys({
-    cpf: Joi.string().length(14).required(),
-    rg: Joi.string().required(),
-    uf_rg: Joi.string().required(),
-    genero: Joi.string().required(),
-    fone: Joi.string().required(),
-    dt_nascimento: Joi.date().required(),
+    cpf: Joi.string().length(14).required().messages({ 'any.required': `"CPF" é obrigatorio` }),
+    rg: Joi.string().required().messages({ 'any.required': `"RG" é obrigatorio` }),
+    uf_rg: Joi.string().required().messages({ 'any.required': `"UFRG" é obrigatorio` }),
+    genero: Joi.string().required().messages({ 'any.required': `"Gênero" é obrigatorio` }),
+    fone: Joi.string().required().messages({ 'any.required': `"Fone" é obrigatorio` }),
+    dt_nascimento: Joi.date()
+      .required()
+      .messages({ 'any.required': `"Data de nascimento" é obrigatorio` }),
     tipo_sanguineo: Joi.string(),
     alergia: Joi.string(),
-    pais: Joi.string().required(),
-    cep: Joi.string().required(),
-    uf: Joi.string().required(),
-    municipio: Joi.string().required(),
-    bairro: Joi.string().required(),
-    logradouro: Joi.string().required(),
-    quadra: Joi.string().required(),
+    cep: Joi.string().required().messages({ 'any.required': `"CEP" é obrigatorio` }),
+    uf: Joi.string().required().messages({ 'any.required': `"UF" é obrigatorio` }),
+    municipio: Joi.string().required().messages({ 'any.required': `"Município" é obrigatorio` }),
+    bairro: Joi.string().required().messages({ 'any.required': `"Bairro" é obrigatorio` }),
+    logradouro: Joi.string().required().messages({ 'any.required': `"Logradouro" é obrigatorio` }),
+    quadra: Joi.string().optional().allow(''),
     lote: Joi.string().optional().allow(''),
     complemento: Joi.string().optional().allow(''),
   }),
 };
 
-const getAthlete = {
+const showAthlete = {
   params: Joi.object().keys({
     athleteId: Joi.string().custom(objectId),
   }),
@@ -31,25 +32,25 @@ const getAthlete = {
 
 const updateAthlete = {
   params: Joi.object().keys({
-    userId: Joi.required().custom(objectId),
+    athleteId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
-      cpf: Joi.string().length(14).required(),
-      rg: Joi.string().required(),
-      uf_rg: Joi.string().required(),
-      genero: Joi.string().required(),
-      fone: Joi.string().required(),
-      dt_nascimento: Joi.date().required(),
+      cpf: Joi.string().length(14).optional(),
+      rg: Joi.string().optional(),
+      uf_rg: Joi.string().optional(),
+      genero: Joi.string().optional(),
+      fone: Joi.string().optional(),
+      dt_nascimento: Joi.date().optional(),
       tipo_sanguineo: Joi.string(),
       alergia: Joi.string(),
-      pais: Joi.string().required(),
-      cep: Joi.string().required(),
-      uf: Joi.string().required(),
-      municipio: Joi.string().required(),
-      bairro: Joi.string().required(),
-      logradouro: Joi.string().required(),
-      quadra: Joi.string().required(),
+      pais: Joi.string().optional(),
+      cep: Joi.string().optional(),
+      uf: Joi.string().optional(),
+      municipio: Joi.string().optional(),
+      bairro: Joi.string().optional(),
+      logradouro: Joi.string().optional(),
+      quadra: Joi.string().optional(),
       lote: Joi.string().optional().allow(''),
       complemento: Joi.string().optional().allow(''),
     })
@@ -58,6 +59,6 @@ const updateAthlete = {
 
 export default {
   createAthlete,
-  getAthlete,
+  showAthlete,
   updateAthlete,
 };

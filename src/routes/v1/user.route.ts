@@ -1,5 +1,5 @@
 import express from 'express';
-import {auth} from '../../middlewares/auth';
+import { auth } from '../../middlewares/auth';
 import validate from '../../middlewares/validate';
 import { userValidation } from '../../validations';
 import { userController } from '../../controllers';
@@ -9,7 +9,8 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+  .get(auth(), userController.getUser);
+// validate(userValidation.getUser),
 
 router
   .route('/:userId')

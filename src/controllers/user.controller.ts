@@ -19,11 +19,21 @@ const getUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getUser = catchAsync(async (req: Request, res: Response) => {
-  const user = await userService.getUserById(req.params.userId);
+  const user = await userService.getUserById(req.user.id);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  res.send(user);
+  res.json({
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      registered: user.registered,
+      role: user.role,
+      isEmailVerifield: user.isEmailVerifield,
+      deletado: user.deletado,
+    },
+  });
 });
 
 const updateUser = catchAsync(async (req: Request, res: Response) => {

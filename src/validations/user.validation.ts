@@ -1,13 +1,13 @@
-import Joi from "joi";
+import Joi from 'joi';
 import { password, objectId } from './custom.validation';
 
 const createUser = {
   body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string(),
-    name: Joi.string().required(),
+    email: Joi.string().email().required().messages({ 'any.required': `"Email" é obrigatorio` }),
+    password: Joi.string().required().messages({ 'any.required': `"Senha" é obrigatorio` }),
+    name: Joi.string().required().messages({ 'any.required': `"Nome" é obrigatorio` }),
     role: Joi.string().required().valid('user', 'admin'),
-  })
+  }),
 };
 
 const getUser = {
@@ -50,5 +50,5 @@ export default {
   getUser,
   getUsers,
   updateUser,
-  deleteUser
+  deleteUser,
 };

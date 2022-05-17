@@ -11,7 +11,7 @@ const router = express.Router();
 
 const defaultRoutes = [
   { path: '/auth', route: authRoute },
-  { path: '/users', route: userRoute },
+  { path: '/user', route: userRoute },
   { path: '/event', route: eventRoute },
   { path: '/athlete', route: athleteRoute },
   { path: '/team', route: teamRoute },

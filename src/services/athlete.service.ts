@@ -12,7 +12,12 @@ const createAthlete = async (athlete: AthleteDocument, user) => {
 };
 
 const getAthleteById = async (id: string) => {
-  return Athlete.findById(id);
+  const athlete = await Athlete.findById(id);
+  if (!athlete) {
+    throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
+  }
+
+  return athlete;
 };
 
 const updateAthleteById = async (id, updateBody) => {

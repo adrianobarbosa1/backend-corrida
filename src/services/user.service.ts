@@ -3,11 +3,7 @@ import { IUserRequest, UserInterface } from '../interfaces/user.interface';
 import { User } from '../models';
 import ApiError from '../utils/ApiError';
 
-const createUser = async ({
-  name,
-  email,
-  password,
-}: IUserRequest): Promise<UserInterface> => {
+const createUser = async ({ name, email, password }: IUserRequest): Promise<UserInterface> => {
   if (await getUserByEmail(email)) {
     throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Email já existe!');
   }
@@ -44,17 +40,14 @@ const updateUserById = async (userId, updateBody) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  if (updateBody.cpf && (await User.isCpfTaken(updateBody.cpf, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'CPF already taken');
-  }
   Object.assign(user, updateBody);
   await user.save();
   return user;
 };
 
-const updateUserAccess = async (userId) => {
+const updateUserIfCreateAthlete = async (userId) => {
   const user = await getUserById(userId);
-  user.access = 1;
+  user.registered = true;
   await user.save();
   return user;
 };
@@ -74,7 +67,7 @@ const deleteUserById = async (userId) => {
 export default {
   createUser,
   queryUsers,
-  updateUserAccess,
+  updateUserIfCreateAthlete,
   getUserById,
   getUserByCpf,
   getUserByEmail,
