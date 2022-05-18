@@ -12,8 +12,8 @@ const createAthlete = catchAsync(async (req: Request, res: Response) => {
 });
 
 const showAthlete = catchAsync(async (req: Request, res: Response) => {
-  const athlete = await athleteService.getAthleteById(req.params.athleteId);
-  
+  const athlete = await athleteService.getAthleteById(req.user.id);
+
   res.status(httpStatus.CREATED).send(athlete);
 });
 

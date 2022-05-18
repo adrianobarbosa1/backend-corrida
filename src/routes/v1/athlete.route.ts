@@ -8,11 +8,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(athleteValidation.createAthlete), athleteController.createAthlete);
-
-
-router
-  .route('/:athleteId')
+  .post(auth(), validate(athleteValidation.createAthlete), athleteController.createAthlete)
   .get(auth(), validate(athleteValidation.showAthlete), athleteController.showAthlete)
   .patch(auth(), validate(athleteValidation.updateAthlete), athleteController.updateAthlete);
 
