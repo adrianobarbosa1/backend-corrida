@@ -33,6 +33,7 @@ const athleteSchema = new mongoose.Schema(
     team: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     running_group: [{ type: Schema.Types.ObjectId, ref: 'RunningGroup' }],
     cpf: { type: String, unique: true, required: true },
+    foto: { type: Buffer },
     rg: { type: String, unique: true, required: true },
     uf_rg: { type: String, required: true },
     genero: { type: String, required: true },
