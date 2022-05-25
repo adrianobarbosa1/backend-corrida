@@ -20,8 +20,7 @@ const getAthleteByIdUser = async (id: string) => {
   return athlete;
 };
 
-const updateAthleteByIdUser = async (id, updateBody) => {
-  console.log(updateBody)
+const updateAthleteByIdUser = async (id: string, updateBody) => {
   const athlete = await getAthleteByIdUser(id);
   if (!athlete) {
     throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
@@ -34,10 +33,39 @@ const updateAthleteByIdUser = async (id, updateBody) => {
   return athlete;
 };
 
+const registerAthleteEvent = async (eventId, userId) => {
+  const athlete = await getAthleteByIdUser(userId);
+  if (!athlete) {
+    throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
+  }
+  if (eventId && (await Athlete.findOne({ event: eventId }))) {
+    throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Athleta já cadastrado nesse evento!');
+  }
+  const date = new Date().getTime();
+  athlete.event.push({
+    eventId, createdAt: date,
+  })
+  await athlete.save();
+  return athlete;
+};
+
+const removeRegisterAthleteEvent = async (eventId, userId) => {
+  const athlete = await getAthleteByIdUser(userId);
+  if (!athlete) {
+    throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
+  }
+  const createdAt = new Date().getTime()
+  athlete.event.splice(eventId, createdAt)
+  await athlete.save();
+  return athlete;
+};
+
 export default {
   createAthlete,
   getAthleteByIdUser,
   updateAthleteByIdUser,
+  registerAthleteEvent,
+  removeRegisterAthleteEvent,
 };
 
 

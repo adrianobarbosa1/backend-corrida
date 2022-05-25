@@ -7,8 +7,17 @@ import { UserInterface } from '../interfaces/user.interface';
 
 const signUp = catchAsync(async (req: Request, res: Response): Promise<void> => {
   const user = await userService.createUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  const token = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.CREATED).json({
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      registered: user.registered,
+      role: user.role,
+      token: token,
+    },
+  });
 });
 
 const signIn = catchAsync(async (req: Request, res: Response): Promise<void> => {

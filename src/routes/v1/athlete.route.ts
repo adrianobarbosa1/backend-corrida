@@ -21,7 +21,7 @@ router
   .get(auth(), validate(athleteValidation.uploadFoto), athleteController.showUploadFoto);
 
 router
-  .route('/:idEvento')
-  .patch(auth(), validate(athleteValidation.registerEvent), multer(upload).single("avatar"), athleteController.uploadFoto)
+  .route('/:eventId')
+  .patch(auth(), validate(athleteValidation.registerEvent), athleteController.registerEvent)
 
 export default router;

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { toJSON, paginate } from './plugins';
 
 const eventSchema = new mongoose.Schema(
   {
@@ -15,5 +16,8 @@ const eventSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+eventSchema.plugin(toJSON);
+eventSchema.plugin(paginate);
 
 export const Event = mongoose.model('Event', eventSchema);

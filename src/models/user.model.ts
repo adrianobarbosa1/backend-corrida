@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 import { UserInterface } from '../interfaces/user.interface';
 import { roles } from '../config/roles';
-import { toJSON } from './plugins';
+import { toJSON, paginate } from './plugins';
 
 const userSchema = new mongoose.Schema(
   {
@@ -60,6 +60,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.plugin(toJSON);
+userSchema.plugin(paginate);
 userSchema.plugin(uniqueValidator, { message: 'já esta sendo utilizado' });
 
 userSchema.methods.isPasswordMatch = async function (password) {

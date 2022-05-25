@@ -39,6 +39,7 @@ const uploadFoto = {
 const registerEvent = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
+    eventId: Joi.string().custom(objectId),
   }),
 }
 

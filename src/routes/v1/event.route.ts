@@ -7,7 +7,12 @@ import { eventController } from '../../controllers';
 const router = express.Router();
 
 router
-  .post('/create', auth('createEvent'), validate(eventValidation.createEvent), eventController.createEvent);
-// .patch('/img', auth(), validate(athleteValidation.uploadFoto), multer(upload).single("avatar"), athleteController.uploadFoto);
+  .route('/')
+  .post(auth('event'), validate(eventValidation.createEvent), eventController.createEvent)
+  .get(auth('event'), validate(eventValidation.showEvents), eventController.showEvents);
+
+router
+  .route('/:eventId')
+  .get(auth('event'), validate(eventValidation.showEvent), eventController.showEvent)
 
 export default router;

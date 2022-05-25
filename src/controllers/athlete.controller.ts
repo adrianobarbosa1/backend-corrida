@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import { catchAsync } from '../utils/catchAsync';
-import { athleteService, userService } from '../services';
+import { athleteService, eventService, userService } from '../services';
 import { userInfo } from 'os';
 
 const createAthlete = catchAsync(async (req: Request, res: Response) => {
@@ -13,7 +13,6 @@ const createAthlete = catchAsync(async (req: Request, res: Response) => {
 
 const showAthlete = catchAsync(async (req: Request, res: Response) => {
   const athlete = await athleteService.getAthleteByIdUser(req.user.id);
-
   res.status(httpStatus.CREATED).send(athlete);
 });
 
@@ -27,6 +26,18 @@ const showUploadFoto = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.CREATED).json({ foto });
 });
 
+const registerEvent = catchAsync(async (req: Request, res: Response) => {
+  await athleteService.registerAthleteEvent(req.params.eventId, req.user.id);
+  const { name } = await eventService.getEventById(req.params.eventId);
+  res.status(httpStatus.CREATED).json({ name });
+});
+
+const removeRegisterEvent = catchAsync(async (req: Request, res: Response) => {
+  await athleteService.removeRegisterAthleteEvent(req.params.eventId, req.user.id);
+  const { name } = await eventService.getEventById(req.params.eventId);
+  res.status(httpStatus.CREATED).json({ name });
+});
+
 const updateAthlete = catchAsync(async (req: Request, res: Response) => {
   const user = await athleteService.updateAthleteByIdUser(req.params.athleteId, req.body);
   console.log(user)
@@ -35,8 +46,10 @@ const updateAthlete = catchAsync(async (req: Request, res: Response) => {
 
 export default {
   createAthlete,
+  registerEvent,
   uploadFoto,
   showUploadFoto,
   showAthlete,
   updateAthlete,
+  removeRegisterEvent,
 };
