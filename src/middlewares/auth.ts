@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
@@ -21,7 +22,7 @@ const verifyCallback = (req: Request, resolve, reject, requiredRights) => async 
   resolve();
 };
 
-export const auth = (...requiredRights) => async (req, res, next) => {
+export const auth = (...requiredRights) => async (req: Request, res: Response, next) => {
   return new Promise((resolve, reject) => {
     passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, requiredRights))(req, res, next);
   })

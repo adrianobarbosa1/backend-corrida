@@ -17,6 +17,32 @@ const queryUsers = async (filter, options) => {
   return users;
 };
 
+const updateUserFoto = async (id, updateFoto) => {
+  const user = await getUserById(id)
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  user.foto = [{
+    name: updateFoto.originalname,
+    size: updateFoto.size,
+    key: updateFoto.filename,
+    url: '',
+    path: updateFoto.path,
+  }]
+
+  console.log(user)
+  await user.save();
+  return user;
+};
+
+const getFoto = async (id) => {
+  const user = await getUserById(id)
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  return user;
+};
+
 //Get user by id
 const getUserById = async (id) => {
   return User.findById(id);
@@ -68,7 +94,9 @@ export default {
   createUser,
   queryUsers,
   updateUserIfCreateAthlete,
+  updateUserFoto,
   getUserById,
+  getFoto,
   getUserByCpf,
   getUserByEmail,
   updateUserById,

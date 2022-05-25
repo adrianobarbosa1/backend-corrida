@@ -12,7 +12,7 @@ const createAthlete = {
       .required()
       .messages({ 'any.required': `"Data de nascimento" é obrigatorio` }),
     tipo_sanguineo: Joi.string(),
-    alergia: Joi.string(),
+    alergia: Joi.string().optional().allow(''),
     cep: Joi.string().required().messages({ 'any.required': `"CEP" é obrigatorio` }),
     uf: Joi.string().required().messages({ 'any.required': `"UF" é obrigatorio` }),
     municipio: Joi.string().required().messages({ 'any.required': `"Município" é obrigatorio` }),
@@ -26,13 +26,25 @@ const createAthlete = {
 
 const showAthlete = {
   params: Joi.object().keys({
-    athleteId: Joi.string().custom(objectId),
+    userId: Joi.string().custom(objectId),
   }),
 };
 
+const uploadFoto = {
+  params: Joi.object().keys({
+    userId: Joi.string().custom(objectId),
+  }),
+}
+
+const registerEvent = {
+  params: Joi.object().keys({
+    userId: Joi.string().custom(objectId),
+  }),
+}
+
 const updateAthlete = {
   params: Joi.object().keys({
-    athleteId: Joi.required().custom(objectId),
+    userId: Joi.string().custom(objectId),
   }),
   body: Joi.object()
     .keys({
@@ -59,6 +71,8 @@ const updateAthlete = {
 
 export default {
   createAthlete,
+  uploadFoto,
+  registerEvent,
   showAthlete,
   updateAthlete,
 };

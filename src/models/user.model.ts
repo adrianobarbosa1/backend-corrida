@@ -37,12 +37,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    foto: { type: Array, default: [] },
     strategy: {
       type: String,
       required: true,
     },
     role: {
-      type: [String],
+      type: String,
       enum: roles,
       default: 'user',
     },

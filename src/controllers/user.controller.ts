@@ -28,6 +28,7 @@ const getUser = catchAsync(async (req: Request, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      foto: user.foto[0],
       registered: user.registered,
       role: user.role,
       isEmailVerifield: user.isEmailVerifield,

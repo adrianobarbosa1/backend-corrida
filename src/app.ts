@@ -18,6 +18,7 @@ import { authLimiter } from './middlewares/rateLimiter'
 import routes from './routes/v1'
 import { errorConverter, errorHandler } from './middlewares/error'
 import ApiError from './utils/ApiError'
+import path from 'path'
 
 const app = express();
 
@@ -33,7 +34,9 @@ if (config.env === 'development') {
 }
 
 //SECURITY HTTP HEADERS REQUEST BODY
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false
+}));
 
 //PARSER JSON REQUEST BODY
 app.use(express.json());
@@ -136,8 +139,13 @@ if (config.env === 'production') {
   app.use('/api/v1/auth', authLimiter);
 }
 
+//arquivo estatico
+app.use('/imgUser', express.static(path.resolve(__dirname, "..", "tmp", "uploads")))
+console.log(__dirname)
+
 //ROUTES
 app.use('/api/v1', routes);
+
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

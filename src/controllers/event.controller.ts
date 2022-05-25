@@ -1,5 +1,4 @@
 import httpStatus from 'http-status';
-import ApiError from '../utils/ApiError';
 import { catchAsync } from '../utils/catchAsync';
 import { eventService } from '../services';
 

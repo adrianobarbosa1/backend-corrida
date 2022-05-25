@@ -1,8 +1,7 @@
 import httpStatus from 'http-status';
-import { Athlete, User } from '../models';
+import { Athlete } from '../models';
 import { AthleteDocument } from '../models/athlete.model';
 import ApiError from '../utils/ApiError';
-import userService from './user.service';
 
 const createAthlete = async (athlete: AthleteDocument, user) => {
   if (await Athlete.findOne({ user: user._id })) {
@@ -12,7 +11,7 @@ const createAthlete = async (athlete: AthleteDocument, user) => {
   return Athlete.create(athlete);
 };
 
-const getAthleteById = async (id: string) => {
+const getAthleteByIdUser = async (id: string) => {
   const athlete = await Athlete.findOne({ user: id })
   if (!athlete) {
     throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
@@ -21,8 +20,9 @@ const getAthleteById = async (id: string) => {
   return athlete;
 };
 
-const updateAthleteById = async (id, updateBody) => {
-  const athlete = await getAthleteById(id);
+const updateAthleteByIdUser = async (id, updateBody) => {
+  console.log(updateBody)
+  const athlete = await getAthleteByIdUser(id);
   if (!athlete) {
     throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
   }
@@ -36,6 +36,8 @@ const updateAthleteById = async (id, updateBody) => {
 
 export default {
   createAthlete,
-  getAthleteById,
-  updateAthleteById,
+  getAthleteByIdUser,
+  updateAthleteByIdUser,
 };
+
+
