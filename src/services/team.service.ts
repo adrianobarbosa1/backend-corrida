@@ -17,7 +17,6 @@ const uploadImg = async (file, idTeam) => {
   if (!team) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Time não encontrado');
   }
-  console.log(file.buffer)
   const base64file = Buffer.from(file.buffer).toString('base64');
 
   team.logo = base64file;

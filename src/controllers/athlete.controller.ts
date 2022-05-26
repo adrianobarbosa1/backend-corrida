@@ -27,9 +27,9 @@ const showUploadFoto = catchAsync(async (req: Request, res: Response) => {
 });
 
 const registerEvent = catchAsync(async (req: Request, res: Response) => {
-  await athleteService.registerAthleteEvent(req.params.eventId, req.user.id);
-  const { name } = await eventService.getEventById(req.params.eventId);
-  res.status(httpStatus.CREATED).json({ name });
+  const event = await eventService.getEventById(req.params.eventId);
+  await athleteService.registerAthleteEvent(event, req.user.id);
+  res.status(httpStatus.CREATED).send(event);
 });
 
 const removeRegisterEvent = catchAsync(async (req: Request, res: Response) => {
@@ -40,7 +40,7 @@ const removeRegisterEvent = catchAsync(async (req: Request, res: Response) => {
 
 const updateAthlete = catchAsync(async (req: Request, res: Response) => {
   const user = await athleteService.updateAthleteByIdUser(req.params.athleteId, req.body);
-  console.log(user)
+
   res.send(user);
 });
 

@@ -30,7 +30,6 @@ const updateUserFoto = async (id, updateFoto) => {
     path: updateFoto.path,
   }]
 
-  console.log(user)
   await user.save();
   return user;
 };

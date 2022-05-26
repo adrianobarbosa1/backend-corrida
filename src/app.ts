@@ -141,7 +141,7 @@ if (config.env === 'production') {
 
 //arquivo estatico
 app.use('/imgUser', express.static(path.resolve(__dirname, "..", "tmp", "uploads")))
-console.log(__dirname)
+
 
 //ROUTES
 app.use('/api/v1', routes);

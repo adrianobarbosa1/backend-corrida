@@ -33,18 +33,18 @@ const updateAthleteByIdUser = async (id: string, updateBody) => {
   return athlete;
 };
 
-const registerAthleteEvent = async (eventId, userId) => {
+const registerAthleteEvent = async (event, userId) => {
   const athlete = await getAthleteByIdUser(userId);
+  const existeEvento = athlete.event.map(item => item.id).includes(event.id)
   if (!athlete) {
     throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
   }
-  if (eventId && (await Athlete.findOne({ event: eventId }))) {
+  if (existeEvento) {
     throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Athleta já cadastrado nesse evento!');
   }
-  const date = new Date().getTime();
-  athlete.event.push({
-    eventId, createdAt: date,
-  })
+
+  athlete.event.push(event.id)
+
   await athlete.save();
   return athlete;
 };

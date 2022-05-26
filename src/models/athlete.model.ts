@@ -32,7 +32,12 @@ const athleteSchema = new mongoose.Schema(
     user: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     team: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     running_group: [{ type: Schema.Types.ObjectId, ref: 'RunningGroup' }],
-    event: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
+    event: [
+      {
+        eventId: { type: Schema.Types.ObjectId, ref: 'Event' },
+        timeRegister: { type: Date, default: Date.now }
+      }
+    ],
     cpf: { type: String, unique: true, required: true },
     foto: { type: Array, default: [] },
     rg: { type: String, unique: true, required: true },

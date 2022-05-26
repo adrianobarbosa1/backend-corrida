@@ -9,10 +9,10 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('event'), validate(eventValidation.createEvent), eventController.createEvent)
-  .get(auth('event'), validate(eventValidation.showEvents), eventController.showEvents);
+  .get(auth(), validate(eventValidation.showEvents), eventController.showEvents);
 
 router
   .route('/:eventId')
-  .get(auth('event'), validate(eventValidation.showEvent), eventController.showEvent)
+  .get(auth(), validate(eventValidation.showEvent), eventController.showEvent)
 
 export default router;
