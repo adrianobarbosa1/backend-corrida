@@ -71,22 +71,20 @@ const updateUserById = async (userId, updateBody) => {
 };
 
 const updateUserIfCreateAthlete = async (userId) => {
-  const user = await getUserById(userId);
-  user.registered = true;
-  await user.save();
-  return user;
-};
+  await User.findByIdAndUpdate(userId, { registered: true }).then(response => {
+    return response
+  }).catch(err => {
+    throw new ApiError(httpStatus.NOT_FOUND, `${err} - User not found`)
+  })
+}
 
 //Delete user by id
 const deleteUserById = async (userId) => {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  user.deletado = true;
-  Object.assign(user);
-  await user.save();
-  return user;
+  await User.findByIdAndUpdate(userId, { deletado: true }).then(response => {
+    return response
+  }).catch(err => {
+    throw new ApiError(httpStatus.NOT_FOUND, `${err} - User not found`)
+  })
 };
 
 export default {

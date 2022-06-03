@@ -9,7 +9,7 @@ const eventSchema = new mongoose.Schema(
     eventDate: { type: Date, required: true },
     hour: { type: String, required: true },
     map: { type: String, required: true },
-    address: { type: String, required: true },
+    address: { type: String, uppercase: true, required: true },
     dateStart: { type: Date, required: true },
     dateEnd: { type: Date, required: true },
     deletado: { type: Boolean, default: false },

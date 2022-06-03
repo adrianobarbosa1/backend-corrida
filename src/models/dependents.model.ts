@@ -21,7 +21,7 @@ const dependentsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    genre: {
+    gender: {
       type: String,
       required: true,
     },

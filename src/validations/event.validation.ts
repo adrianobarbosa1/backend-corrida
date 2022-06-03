@@ -30,8 +30,15 @@ const showEvent = {
   }),
 };
 
+const uploadFoto = {
+  params: Joi.object().keys({
+    eventId: Joi.string().custom(objectId),
+  })
+}
+
 export default {
   createEvent,
   showEvents,
-  showEvent
+  showEvent,
+  uploadFoto
 }

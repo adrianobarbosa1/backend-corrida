@@ -4,6 +4,7 @@ import { AthleteDocument } from '../models/athlete.model';
 import ApiError from '../utils/ApiError';
 
 const createAthlete = async (athlete: AthleteDocument, user) => {
+
   if (await Athlete.findOne({ user: user._id })) {
     throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Athleta já existe');
   }
@@ -11,17 +12,8 @@ const createAthlete = async (athlete: AthleteDocument, user) => {
   return Athlete.create(athlete);
 };
 
-const getAthleteByIdUser = async (id: string) => {
-  const athlete = await Athlete.findOne({ user: id })
-  if (!athlete) {
-    throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
-  }
-
-  return athlete;
-};
-
-const updateAthleteByIdUser = async (id: string, updateBody) => {
-  const athlete = await getAthleteByIdUser(id);
+const updateAthleteByIdUser = async (userId: string, updateBody) => {
+  const athlete = await Athlete.findOne({ user: userId })
   if (!athlete) {
     throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
   }
@@ -33,24 +25,40 @@ const updateAthleteByIdUser = async (id: string, updateBody) => {
   return athlete;
 };
 
-const registerAthleteEvent = async (event, userId) => {
-  const athlete = await getAthleteByIdUser(userId);
-  const existeEvento = athlete.event.map(item => item.id).includes(event.id)
-  if (!athlete) {
-    throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
-  }
-  if (existeEvento) {
-    throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Athleta já cadastrado nesse evento!');
-  }
+const registerAthleteEvent = async (eventId, userId) => {
+  console.log(eventId)
+  const temEvent = await Athlete.find({ event: eventId })
+  console.log(temEvent)
+  await Athlete.updateOne(
+    { userId },
+    { $addToSet: { event: [{ event }] } }
+  ).then(response => {
+    // console.log(response)
+    return response
+  }).catch(err => {
+    throw new ApiError(httpStatus.NOT_FOUND, `${err} - User not found`)
+  })
 
-  athlete.event.push(event.id)
-
-  await athlete.save();
-  return athlete;
 };
 
+// const athlete = await getAthleteByIdUser(userId);
+// console.log(athlete)
+// const existeEvento = await athlete.event.map(item => item.id).includes(event.id)
+// if (!athlete) {
+//   throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
+// }
+// if (existeEvento) {
+//   throw new ApiError(`${httpStatus.BAD_REQUEST}`, 'Athleta já cadastrado nesse evento!');
+// }
+
+// await athlete.event.push(event.id)
+
+// await athlete.save();
+// return athlete;
+
+
 const removeRegisterAthleteEvent = async (eventId, userId) => {
-  const athlete = await getAthleteByIdUser(userId);
+  const athlete = await Athlete.findOne({ user: userId })
   if (!athlete) {
     throw new ApiError(`${httpStatus.NOT_FOUND}`, 'Atleta não encontrado');
   }
@@ -62,7 +70,6 @@ const removeRegisterAthleteEvent = async (eventId, userId) => {
 
 export default {
   createAthlete,
-  getAthleteByIdUser,
   updateAthleteByIdUser,
   registerAthleteEvent,
   removeRegisterAthleteEvent,

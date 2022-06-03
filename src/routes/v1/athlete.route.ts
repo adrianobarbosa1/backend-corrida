@@ -22,6 +22,6 @@ router
 
 router
   .route('/:eventId')
-  .patch(auth(), validate(athleteValidation.registerEvent), athleteController.registerEvent)
+  .put(auth(), validate(athleteValidation.registerEvent), athleteController.registerEvent)
 
 export default router;

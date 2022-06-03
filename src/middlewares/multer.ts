@@ -2,10 +2,12 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs'
 import { athleteService } from '../services';
+import { required } from 'joi';
 
 //UPLOAD DE IMAGEM
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
+
     const { cpf } = await athleteService.getAthleteByIdUser(req.user.id)
     let cpfFormated = cpf;
     cpfFormated = cpfFormated.replace(".", "");
@@ -13,12 +15,22 @@ const storage = multer.diskStorage({
     cpfFormated = cpfFormated.replace("-", "");
 
     const isvalidate = () => {
-      const dir = path.resolve(__dirname, '..', '..', 'tmp', 'uploads', cpfFormated)
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-        return dir;
+      if (req.query.type === 'event') {
+        const dir = path.resolve(__dirname, '..', '..', 'tmp', 'uploads', 'event')
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+          return dir;
+        } else {
+          return dir;
+        }
       } else {
-        return dir;
+        const dir = path.resolve(__dirname, '..', '..', 'tmp', 'uploads', cpfFormated)
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+          return dir;
+        } else {
+          return dir;
+        }
       }
     };
 

@@ -7,7 +7,7 @@ import { userInfo } from 'os';
 
 const createAthlete = catchAsync(async (req: Request, res: Response) => {
   const athlete = await athleteService.createAthlete(req.body, req.user);
-  userService.updateUserIfCreateAthlete(req.user);
+  await userService.updateUserIfCreateAthlete(req.user.id);
   res.status(httpStatus.CREATED).send(athlete);
 });
 
@@ -28,7 +28,7 @@ const showUploadFoto = catchAsync(async (req: Request, res: Response) => {
 
 const registerEvent = catchAsync(async (req: Request, res: Response) => {
   const event = await eventService.getEventById(req.params.eventId);
-  await athleteService.registerAthleteEvent(event, req.user.id);
+  await athleteService.registerAthleteEvent(req.params.eventId, req.user);
   res.status(httpStatus.CREATED).send(event);
 });
 

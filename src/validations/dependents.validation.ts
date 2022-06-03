@@ -5,7 +5,7 @@ const createDependents = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     dt_nascimento: Joi.date().required(),
-    genre: Joi.string().required(),
+    gender: Joi.string().required(),
     team: Joi.string().optional().allow(''),
   }),
 };
